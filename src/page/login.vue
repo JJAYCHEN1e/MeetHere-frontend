@@ -3,11 +3,11 @@
     <transition name="form-fade" mode="in-out">
       <section class="form_contianer" v-show="showLogin">
         <div class="manage_tip">
-          <p>elm后台管理系统</p>
+          <p>Welcome to MeetHere</p>
         </div>
         <el-form :model="loginForm" :rules="rules" ref="loginForm">
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="用户名">
+            <el-input v-model="loginForm.username" placeholder="邮箱地址">
               <span>dsfsf</span>
             </el-input>
           </el-form-item>
@@ -17,10 +17,11 @@
           <el-form-item>
             <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="success" @click="submitForm('loginForm')" class="submit_btn">注册</el-button>
+          </el-form-item>
         </el-form>
-        <p class="tip">温馨提示：</p>
-        <p class="tip">未登录过的新用户，自动注册</p>
-        <p class="tip">注册过的用户可凭账号密码登录</p>
+        <!-- <p class="tip">温馨提示：</p> -->
       </section>
     </transition>
   </div>
@@ -39,7 +40,7 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: "请输入邮箱地址", trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
       },
@@ -104,7 +105,8 @@ export default {
 <style lang="less" scoped>
 @import "../style/mixin";
 .login_page {
-  background-color: #324057;
+  background: url("/static/Login-Background-2.jpg") no-repeat center center;
+  background-size: cover;
 }
 .manage_tip {
   position: absolute;
