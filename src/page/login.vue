@@ -1,43 +1,57 @@
 <template>
   <div class="login_page fillcontain">
-    <transition name="form-fade" mode="in-out">
-      <section class="form_contianer" v-show="showLogin">
-        <div class="manage_tip">
-          <p>Welcome to MeetHere</p>
-        </div>
-        <el-form :model="loginForm" :rules="rules" ref="loginForm">
-          <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="邮箱地址">
-              <span>dsfsf</span>
-            </el-input>
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success" @click="submitForm('loginForm')" class="submit_btn">注册</el-button>
-          </el-form-item>
-        </el-form>
-        <!-- <p class="tip">温馨提示：</p> -->
-      </section>
-    </transition>
+    <div>
+      <transition name="form-fade" mode="in-out">
+        <section class="form_contianer" v-show="showLogin">
+          <div class="manage_tip">
+            <p>Welcome to MeetHere</p>
+          </div>
+          <el-form :model="loginForm" :rules="rules" ref="loginForm">
+            <el-form-item>
+              <p class="title">登录</p>
+            </el-form-item>
+            <el-form-item prop="username">
+              <el-input v-model="loginForm.username" placeholder="邮箱地址">
+                <span>dsfsf</span>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="password">
+              <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success" @click="setDialogVisible()" class="submit_btn">注册</el-button>
+            </el-form-item>
+          </el-form>
+          <!-- <p class="tip">温馨提示：</p> -->
+        </section>
+      </transition>
+    </div>
+    <SignUp
+      v-bind:dialogVisible="signUpDialogVisible"
+      v-on:updateDialogVisible="updateDialogVisible"
+    ></SignUp>
   </div>
 </template>
 
 <script>
 import { login, getAdminInfo } from "@/api/getData";
 import { mapActions, mapState } from "vuex";
+import SignUp from "@/components/SignUp.vue";
 
 export default {
+  components: {
+    SignUp
+  },
   data() {
     return {
       loginForm: {
         username: "",
         password: ""
       },
+      signUpDialogVisible: false,
       rules: {
         username: [
           { required: true, message: "请输入邮箱地址", trigger: "blur" }
@@ -57,6 +71,12 @@ export default {
     ...mapState(["adminInfo"])
   },
   methods: {
+    setDialogVisible() {
+      this.signUpDialogVisible = true;
+    },
+    updateDialogVisible(newValue) {
+      this.signUpDialogVisible = newValue;
+    },
     ...mapActions(["getAdminData"]),
     async submitForm(formName) {
       this.$refs[formName].validate(async valid => {
@@ -119,8 +139,8 @@ export default {
   }
 }
 .form_contianer {
-  .wh(320px, 210px);
-  .ctp(320px, 210px);
+  .wh(320px, 290px);
+  .ctp(320px, 290px);
   padding: 25px;
   border-radius: 5px;
   text-align: center;
@@ -128,6 +148,10 @@ export default {
   .submit_btn {
     width: 100%;
     font-size: 16px;
+  }
+  .title{
+    font-size: 25px;
+    color: #303133;
   }
 }
 .tip {
