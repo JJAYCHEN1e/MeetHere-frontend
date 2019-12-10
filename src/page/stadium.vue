@@ -2,8 +2,8 @@
   <div>
     <head-top></head-top>
     <el-row>
-      <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0" style="margin: 50px">
-        <el-card :body-style="{ padding: '0px' }" shadow="hover" style="width: 500px">
+      <el-col :span="4" v-for="(o, index) in 10" :key="o" :offset="index > 0 ? 2 : 0" style="margin: 50px">
+        <el-card :body-style="{ padding: '0px' }" shadow="hover" style="width: 250px">
           <img src="./11.png" class="image" />
           <div style="padding: 14px;">
             <span>中北自习室</span> <br>
@@ -72,8 +72,8 @@ export default {
 }
 
 .image {
-  width: 500px;
-  height: 500px;
+  width: 250px;
+  height: 250px;
   display: block;
 }
 
