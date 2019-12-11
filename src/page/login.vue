@@ -2,7 +2,7 @@
   <div class="login_page fillcontain">
     <div>
       <transition name="form-fade" mode="in-out">
-        <section class="form_contianer" v-show="showLogin">
+        <section class="form_contianer">
           <div class="manage_tip">
             <p>Welcome to MeetHere</p>
           </div>
@@ -57,18 +57,10 @@ export default {
           { required: true, message: "请输入邮箱地址", trigger: "blur" }
         ],
         password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      },
-      showLogin: false
+      }
     };
   },
-  mounted() {
-    this.showLogin = true;
-    if (!this.adminInfo.id) {
-      this.getAdminData();
-    }
-  },
   computed: {
-    ...mapState(["adminInfo"])
   },
   methods: {
     setDialogVisible() {
@@ -77,7 +69,6 @@ export default {
     updateDialogVisible(newValue) {
       this.signUpDialogVisible = newValue;
     },
-    ...mapActions(["getAdminData"]),
     async submitForm(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
@@ -106,17 +97,6 @@ export default {
           return false;
         }
       });
-    }
-  },
-  watch: {
-    adminInfo: function(newValue) {
-      if (newValue.id) {
-        this.$message({
-          type: "success",
-          message: "检测到您之前登录过，将自动登录"
-        });
-        this.$router.push("manage");
-      }
     }
   }
 };
