@@ -1,6 +1,13 @@
 import fetch from '@/config/fetch'
 
 /**
+ * 测试用
+ */
+export const test = () => fetch('/InitialTimelineItems', {
+	count: 3
+});
+
+/**
  * 登陆
  */
 
