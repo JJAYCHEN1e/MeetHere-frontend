@@ -19,10 +19,10 @@
       <el-form-item label="邮件验证码" prop="code">
         <el-row type="flex" justify="space-between">
           <el-col :span="13">
-            <el-input v-model="ruleForm.code"  placeholder="请输入邮件中的验证码"></el-input>
+            <el-input v-model="ruleForm.code" placeholder="请输入邮件中的验证码"></el-input>
           </el-col>
           <el-col :span="6.5">
-              <el-button type="primary" @click="submitForm('ruleForm')">发送验证码</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm')">发送验证码</el-button>
           </el-col>
         </el-row>
       </el-form-item>
@@ -48,8 +48,16 @@ export default {
       },
       rules: {
         email: [
-          { required: true, message: "请输入注册邮箱", trigger: "blur" }
-          // { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" }
+          {
+            required: true,               //是否必填
+            message: "请输入邮箱地址",       //错误提示信息
+            trigger: "blur"               //检验方式（blur为鼠标点击其他地方，）
+          },
+          {
+            type: "email",                //要检验的类型（number，email，date等）
+            message: "请输入正确的邮箱地址",
+            trigger: ["blur", "change"]   //检验方式（change为检验的字符变化的时候）
+          }
         ],
         userName: [
           { required: true, message: "请输入用户名", trigger: "blur" },

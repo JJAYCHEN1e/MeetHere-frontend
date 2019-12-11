@@ -19,7 +19,7 @@
               <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
+              <el-button type="primary" @click="test()" class="submit_btn">登陆</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="success" @click="setDialogVisible()" class="submit_btn">注册</el-button>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { login, getAdminInfo } from "@/api/getData";
+import { login, getAdminInfo, test } from "@/api/getData";
 import { mapActions, mapState } from "vuex";
 import SignUp from "@/components/SignUp.vue";
 
@@ -60,8 +60,6 @@ export default {
       }
     };
   },
-  computed: {
-  },
   methods: {
     setDialogVisible() {
       this.signUpDialogVisible = true;
@@ -69,35 +67,40 @@ export default {
     updateDialogVisible(newValue) {
       this.signUpDialogVisible = newValue;
     },
-    async submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          const res = await login({
-            user_name: this.loginForm.username,
-            password: this.loginForm.password
-          });
-          if (res.status == 1) {
-            this.$message({
-              type: "success",
-              message: "登录成功"
-            });
-            this.$router.push("manage");
-          } else {
-            this.$message({
-              type: "error",
-              message: res.message
-            });
-          }
-        } else {
-          this.$notify.error({
-            title: "错误",
-            message: "请输入正确的用户名密码",
-            offset: 100
-          });
-          return false;
-        }
-      });
-    }
+    async test() {
+      const res = await test();
+      console.log(res);
+    },
+    // async submitForm(formName) {
+    //   this.$refs[formName].validate(async valid => {
+    //     if (valid) {
+    //       const res = await login({
+    //         user_name: this.loginForm.username,
+    //         password: this.loginForm.password
+    //       });
+    //       console.log(res);
+    //       if (res.status == 1) {
+    //         this.$message({
+    //           type: "success",
+    //           message: "登录成功"
+    //         });
+    //         this.$router.push("manage");
+    //       } else {
+    //         this.$message({
+    //           type: "error",
+    //           message: res.message
+    //         });
+    //       }
+    //     } else {
+    //       this.$notify.error({
+    //         title: "错误",
+    //         message: "请输入正确的用户名密码",
+    //         offset: 100
+    //       });
+    //       return false;
+    //     }
+    //   });
+    // }
   }
 };
 </script>
@@ -129,7 +132,7 @@ export default {
     width: 100%;
     font-size: 16px;
   }
-  .title{
+  .title {
     font-size: 25px;
     color: #303133;
   }
