@@ -18,9 +18,9 @@
                     placeholder="示例: admin@meethere.com"
                 ></el-input>
             </el-form-item>
-            <el-form-item label="用户名" prop="userName">
+            <el-form-item label="用户名" prop="username">
                 <el-input
-                    v-model="ruleForm.userName"
+                    v-model="ruleForm.username"
                     placeholder="请输入用户名: (不超过 8 个字符)"
                 ></el-input>
             </el-form-item>
@@ -69,7 +69,7 @@ export default {
             currentDialogVisible: this.dialogVisible,
             ruleForm: {
                 email: '',
-                userName: '',
+                username: '',
                 password: '',
                 code: ''
             },
@@ -86,7 +86,7 @@ export default {
                         trigger: ['blur', 'change'] //检验方式（change为检验的字符变化的时候）
                     }
                 ],
-                userName: [
+                username: [
                     {
                         required: true,
                         message: '请输入用户名',
