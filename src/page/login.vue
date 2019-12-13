@@ -1,45 +1,53 @@
 <template>
   <div class="login_page fillcontain">
     <div>
-      <transition name="form-fade" mode="in-out">
+      <transition name="form-fade"
+                  mode="in-out">
         <section class="form_contianer">
           <div class="manage_tip">
             <p>Welcome to MeetHere</p>
           </div>
-          <el-form :model="loginForm" :rules="rules" ref="loginForm">
+          <el-form :model="loginForm"
+                   :rules="rules"
+                   ref="loginForm">
             <el-form-item>
               <p class="title">登录</p>
             </el-form-item>
             <el-form-item prop="username">
-              <el-input v-model="loginForm.username" placeholder="邮箱地址">
+              <el-input v-model="loginForm.username"
+                        placeholder="邮箱地址">
                 <span>dsfsf</span>
               </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
+              <el-input type="password"
+                        placeholder="密码"
+                        v-model="loginForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="test()" class="submit_btn">登陆</el-button>
+              <el-button type="primary"
+                         @click="test()"
+                         class="submit_btn">登陆</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" @click="setDialogVisible()" class="submit_btn">注册</el-button>
+              <el-button type="success"
+                         @click="setDialogVisible()"
+                         class="submit_btn">注册</el-button>
             </el-form-item>
           </el-form>
           <!-- <p class="tip">温馨提示：</p> -->
         </section>
       </transition>
     </div>
-    <SignUp
-      v-bind:dialogVisible="signUpDialogVisible"
-      v-on:updateDialogVisible="updateDialogVisible"
-    ></SignUp>
+    <SignUp v-bind:dialogVisible="signUpDialogVisible"
+            v-on:updateDialogVisible="updateDialogVisible"></SignUp>
   </div>
 </template>
 
 <script>
-import { login, getAdminInfo, test } from "@/api/getData";
-import { mapActions, mapState } from "vuex";
-import SignUp from "@/components/SignUp.vue";
+import { login, getAdminInfo, test } from '@/api/getData'
+import { mapActions, mapState } from 'vuex'
+import SignUp from '@/components/SignUp.vue'
 
 export default {
   components: {
@@ -48,29 +56,29 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "",
-        password: ""
+        username: '',
+        password: ''
       },
       signUpDialogVisible: false,
       rules: {
         username: [
-          { required: true, message: "请输入邮箱地址", trigger: "blur" }
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' }
         ],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
-    };
+    }
   },
   methods: {
     setDialogVisible() {
-      this.signUpDialogVisible = true;
+      this.signUpDialogVisible = true
     },
     updateDialogVisible(newValue) {
-      this.signUpDialogVisible = newValue;
+      this.signUpDialogVisible = newValue
     },
     async test() {
-      const res = await test();
-      console.log(res);
-    },
+      const res = await test()
+      console.log(res)
+    }
     // async submitForm(formName) {
     //   this.$refs[formName].validate(async valid => {
     //     if (valid) {
@@ -102,13 +110,13 @@ export default {
     //   });
     // }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
-@import "../style/mixin";
+@import '../style/mixin';
 .login_page {
-  background: url("/static/Login-Background-2.jpg") no-repeat center center;
+  background: url('/static/Login-Background-2.jpg') no-repeat center center;
   background-size: cover;
 }
 .manage_tip {
