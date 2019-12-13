@@ -1,65 +1,55 @@
 <template>
-  <el-dialog
-    title="注册"
-    :visible.sync="currentDialogVisible"
-    width="500px"
-    center
-  >
-    <el-form
-      :model="registerForm"
-      :rules="rules"
-      ref="registerForm"
-      label-position="left"
-      label-width="100px"
-    >
-      <el-form-item label="注册邮箱" prop="email">
-        <el-input
-          v-model="registerForm.email"
-          placeholder="示例: admin@meethere.com"
-        ></el-input>
+  <el-dialog title="注册"
+             :visible.sync="currentDialogVisible"
+             width="500px"
+             center>
+    <el-form :model="registerForm"
+             :rules="rules"
+             ref="registerForm"
+             label-position="left"
+             label-width="100px">
+      <el-form-item label="注册邮箱"
+                    prop="email">
+        <el-input v-model="registerForm.email"
+                  placeholder="示例: admin@meethere.com"></el-input>
       </el-form-item>
-      <el-form-item label="用户名" prop="userName">
-        <el-input
-          v-model="registerForm.userName"
-          placeholder="请输入用户名: (不超过 8 个字符)"
-        ></el-input>
+      <el-form-item label="用户名"
+                    prop="userName">
+        <el-input v-model="registerForm.userName"
+                  placeholder="请输入用户名: (不超过 8 个字符)"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input
-          type="password"
-          v-model="registerForm.password"
-          placeholder="请输入密码: (6 至 20 个字符)"
-        ></el-input>
+      <el-form-item label="密码"
+                    prop="password">
+        <el-input type="password"
+                  v-model="registerForm.password"
+                  placeholder="请输入密码: (6 至 20 个字符)"></el-input>
       </el-form-item>
-      <el-form-item label="邮件验证码" prop="checkCode">
-        <el-row type="flex" justify="space-between">
+      <el-form-item label="邮件验证码"
+                    prop="checkCode">
+        <el-row type="flex"
+                justify="space-between">
           <el-col :span="13">
-            <el-input
-              v-model="registerForm.checkCode"
-              placeholder="请输入邮件中的验证码"
-            ></el-input>
+            <el-input v-model="registerForm.checkCode"
+                      placeholder="请输入邮件中的验证码"></el-input>
           </el-col>
           <el-col :span="6.5">
-            <el-button type="primary" @click="submitForm('registerForm')"
-              >发送验证码</el-button
-            >
+            <el-button type="primary"
+                       @click="getCode('registerForm')">发送验证码</el-button>
           </el-col>
         </el-row>
       </el-form-item>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button
-        type="primary"
-        class="submit_btn"
-        @click="submitForm('registerForm')"
-        >立即注册</el-button
-      >
+    <span slot="footer"
+          class="dialog-footer">
+      <el-button type="primary"
+                 class="submit_btn"
+                 @click="submitForm('registerForm')">立即注册</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import { register } from '@/api/getData'
+import { register, getCode } from '@/api/getData'
 
 export default {
   name: 'SignUp',
@@ -139,8 +129,31 @@ export default {
             password: this.registerForm.password,
             checkCode: this.registerForm.checkCode
           })
+          if (res.code == 0) {
+            alert('注册成功!')
+            this.currentDialogVisible = false
+          } else if (res.code == -1) {
+            alert('注册失败')
+          }
         } else {
           console.log('注册表单验证错误')
+          return false
+        }
+      })
+    },
+    getCode(formName) {
+      this.$refs[formName].validateField('email', async error => {
+        if (!error) {
+          const res = await getCode({
+            email: this.registerForm.email
+          })
+          if (res.code == 0) {
+            alert('发送成功!')
+          } else if (res.code == -1) {
+            alert('发送失败，邮箱可能已被占用')
+          }
+        } else {
+          console.log('邮箱格式验证错误')
           return false
         }
       })
@@ -149,10 +162,12 @@ export default {
   watch: {
     dialogVisible: function(newValue) {
       this.currentDialogVisible = newValue
+      this.$refs['registerForm'].resetFields()
     },
     currentDialogVisible: function(newValue) {
       // 只能通过观察 currentDialogVisible 来判断是否点击 X
       this.$emit('updateDialogVisible', newValue)
+      this.$refs['registerForm'].resetFields()
     }
   }
 }

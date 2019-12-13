@@ -21,6 +21,11 @@ export const upload = () =>
   )
 
 /**
+ * 获取邮件验证码
+ */
+export const getCode = data => fetch('/customer/check-code', data, 'POST')
+
+/**
  * 注册
  */
 export const register = data => fetch('/customer/register', data, 'POST')
