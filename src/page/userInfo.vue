@@ -15,12 +15,12 @@
           <span>admin@meethere.com</span>
         </el-form-item>
         <el-form-item label="用户名"
-                      prop="username">
-          <el-input v-model="userInfoForm.username"></el-input>
+                      prop="userName">
+          <el-input v-model="userInfoForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="手机号码"
-                      prop="phone_number">
-          <el-input v-model="userInfoForm.phone_number"></el-input>
+                      prop="phoneNumber">
+          <el-input v-model="userInfoForm.phoneNumber"></el-input>
         </el-form-item>
         <el-form-item label="注册时间">
           <span>{{ adminInfo.create_time }}</span>
@@ -29,7 +29,8 @@
       <div class="save_button">
         <el-button type="success"
                    icon="el-icon-check"
-                   circle></el-button>
+                   circle
+                   @click="save('userInfoForm')"></el-button>
       </div>
     </div>
   </div>
@@ -39,17 +40,21 @@
 import headTop from '../components/headTop'
 import { mapState } from 'vuex'
 import { baseUrl, baseImgPath } from '@/config/env'
+import { saveUserInfo } from '@/api/getData'
 
 export default {
   data() {
     return {
       baseUrl,
       userInfoForm: {
-        username: 'JJAYCHEN',
-        phone_number: '18066668888'
+        customerId: '2',
+        email: '',
+        phoneNumber: '18066668888',
+        userName: 'JJAYCHEN',
+        registeredTime: ''
       },
       rules: {
-        username: [
+        userName: [
           {
             required: true,
             message: '请输入用户名',
@@ -62,9 +67,9 @@ export default {
             trigger: 'blur'
           }
         ],
-        phone_number: [
+        phoneNumber: [
           {
-            required: true,
+            required: false,
             pattern: /^1[34578]\d{9}$/, // 正则表达式
             message: '目前只支持中国大陆的手机号码',
             trigger: 'blur'
@@ -80,7 +85,27 @@ export default {
     // 使用对象展开运算符将此对象混入到外部对象中
     ...mapState(['adminInfo'])
   },
-  methods: {}
+  methods: {
+    save(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const res = await saveUserInfo({
+            customerId: this.userInfoForm.customerId,
+            userName: this.userInfoForm.userName,
+            phoneNumber: this.userInfoForm.phoneNumber
+          })
+          if (res.code == 0) {
+            alert('保存成功!')
+          } else if (res.code == -1) {
+            alert('保存失败')
+          }
+        } else {
+          console.log('注册表单验证错误')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 

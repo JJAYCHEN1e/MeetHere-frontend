@@ -26,6 +26,12 @@ export const upload = () =>
 export const getCode = data => fetch('/customer/check-code', data, 'POST')
 
 /**
+ * 保存用户信息
+ */
+export const saveUserInfo = data =>
+  fetch('/customer/save-user-info', data, 'POST')
+
+/**
  * 注册
  */
 export const register = data => fetch('/customer/register', data, 'POST')
