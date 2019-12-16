@@ -1,6 +1,12 @@
 import { baseUrl } from './env'
 
-export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
+export default async (
+  url = '',
+  data = {},
+  type = 'GET',
+  token = '',
+  method = 'fetch'
+) => {
   type = type.toUpperCase()
   url = baseUrl + url
 
@@ -22,7 +28,8 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
       method: type,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        TOKEN: token
       }
       // mode: "cors",
       // cache: "force-cache"
@@ -32,6 +39,7 @@ export default async (url = '', data = {}, type = 'GET', method = 'fetch') => {
       Object.defineProperty(requestConfig, 'body', {
         value: JSON.stringify(data)
       })
+      console.log(requestConfig)
     }
 
     try {

@@ -1,35 +1,9 @@
 import fetch from '@/config/fetch'
 
 /**
- * 测试用
- */
-export const test = () =>
-  fetch('/InitialTimelineItems', {
-    count: 3
-  })
-
-export const upload = () =>
-  fetch(
-    '/uploadItem',
-    {
-      userName: '123',
-      title: '456',
-      text: '123456',
-      file: ''
-    },
-    'POST'
-  )
-
-/**
  * 获取邮件验证码
  */
 export const getCode = data => fetch('/customer/check-code', data, 'POST')
-
-/**
- * 保存用户信息
- */
-export const saveUserInfo = data =>
-  fetch('/customer/save-user-info', data, 'POST')
 
 /**
  * 注册
@@ -41,6 +15,12 @@ export const register = data => fetch('/customer/register', data, 'POST')
  */
 
 export const login = data => fetch('/customer/login', data, 'POST')
+
+/**
+ * 保存用户信息
+ */
+export const saveUserInfo = (data, token) =>
+  fetch('/customer/save-user-info', data, 'POST', token)
 
 /**
  * 退出
