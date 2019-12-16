@@ -13,8 +13,8 @@
             <el-form-item>
               <p class="title">登录</p>
             </el-form-item>
-            <el-form-item prop="username">
-              <el-input v-model="loginForm.username"
+            <el-form-item prop="email">
+              <el-input v-model="loginForm.email"
                         placeholder="邮箱地址">
                 <span>dsfsf</span>
               </el-input>
@@ -26,7 +26,7 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary"
-                         @click="test()"
+                         @click="login('loginForm')"
                          class="submit_btn">登陆</el-button>
             </el-form-item>
             <el-form-item>
@@ -46,7 +46,7 @@
 
 <script>
 import { login, getAdminInfo, test } from '@/api/getData'
-import { mapActions, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import SignUp from '@/components/SignUp.vue'
 
 export default {
@@ -56,59 +56,65 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
+        email: '',
         password: ''
       },
       signUpDialogVisible: false,
       rules: {
-        username: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' }
-        ],
+        email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
     }
   },
   methods: {
+    ...mapMutations(['saveLoginInfo']),
     setDialogVisible() {
       this.signUpDialogVisible = true
     },
     updateDialogVisible(newValue) {
       this.signUpDialogVisible = newValue
     },
-    async test() {
-      const res = await test()
-      console.log(res)
+    async login(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const res = await login({
+            email: this.loginForm.email,
+            password: this.loginForm.password
+          })
+          console.log(res)
+          if (res.code == 0) {
+            this.$message({
+              type: 'success',
+              message: '登录成功'
+            })
+            this.saveLoginInfo({
+              userType: 0,
+              LoginInfo: {
+                customerId: res.data['customerId'],
+                email: res.data['email'],
+                phoneNumber: res.data['phoneNumber'],
+                userName: res.data['userName'],
+                registeredTime: res.data['registeredTime']
+              },
+              token: res.data['token']
+            })
+            this.$router.push('manage')
+          } else if (res.code == -1) {
+            this.$message({
+              type: 'error',
+              message: res.message
+            })
+          }
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: '请输入正确格式的邮箱地址与密码',
+            offset: 100
+          })
+          return false
+        }
+      })
     }
-    // async submitForm(formName) {
-    //   this.$refs[formName].validate(async valid => {
-    //     if (valid) {
-    //       const res = await login({
-    //         user_name: this.loginForm.username,
-    //         password: this.loginForm.password
-    //       });
-    //       console.log(res);
-    //       if (res.status == 1) {
-    //         this.$message({
-    //           type: "success",
-    //           message: "登录成功"
-    //         });
-    //         this.$router.push("manage");
-    //       } else {
-    //         this.$message({
-    //           type: "error",
-    //           message: res.message
-    //         });
-    //       }
-    //     } else {
-    //       this.$notify.error({
-    //         title: "错误",
-    //         message: "请输入正确的用户名密码",
-    //         offset: 100
-    //       });
-    //       return false;
-    //     }
-    //   });
-    // }
   }
 }
 </script>
