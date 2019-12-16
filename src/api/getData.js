@@ -3,7 +3,7 @@ import fetch from '@/config/fetch'
 /**
  * 获取邮件验证码
  */
-export const getCode = data => fetch('/customer/check-code', data, 'POST')
+export const getCode = data => fetch('/customer/check-code', data, 'GET')
 
 /**
  * 注册
