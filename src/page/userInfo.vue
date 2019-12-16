@@ -9,10 +9,10 @@
                label-position="left"
                label-width="100px">
         <el-form-item label="用户 ID">
-          <span>1</span>
+          <span>{{ userInfo.customerId }}</span>
         </el-form-item>
         <el-form-item label="邮箱地址">
-          <span>admin@meethere.com</span>
+          <span>{{ userInfo.email }}</span>
         </el-form-item>
         <el-form-item label="用户名"
                       prop="userName">
@@ -23,7 +23,7 @@
           <el-input v-model="userInfoForm.phoneNumber"></el-input>
         </el-form-item>
         <el-form-item label="注册时间">
-          <span>{{ adminInfo.create_time }}</span>
+          <span>{{ userInfo.registeredTime }}</span>
         </el-form-item>
       </el-form>
       <div class="save_button">
@@ -47,11 +47,8 @@ export default {
     return {
       baseUrl,
       userInfoForm: {
-        customerId: '2',
-        email: '',
-        phoneNumber: '18066668888',
-        userName: 'JJAYCHEN',
-        registeredTime: ''
+        phoneNumber: this.$store.state.userInfo.phoneNumber,
+        userName: this.$store.state.userInfo.userName
       },
       rules: {
         userName: [
@@ -83,21 +80,25 @@ export default {
   },
   computed: {
     // 使用对象展开运算符将此对象混入到外部对象中
-    ...mapState(['adminInfo'])
+    ...mapState(['userInfo', 'token'])
   },
   methods: {
     save(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const res = await saveUserInfo({
-            customerId: this.userInfoForm.customerId,
-            userName: this.userInfoForm.userName,
-            phoneNumber: this.userInfoForm.phoneNumber
-          })
+          const res = await saveUserInfo(
+            {
+              customerId: this.userInfo.customerId,
+              userName: this.userInfoForm.userName,
+              phoneNumber: this.userInfoForm.phoneNumber
+            },
+            this.token
+          )
           if (res.code == 0) {
             alert('保存成功!')
           } else if (res.code == -1) {
             alert('保存失败')
+            console.log(res.message)
           }
         } else {
           console.log('注册表单验证错误')
