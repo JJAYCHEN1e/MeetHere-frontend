@@ -23,6 +23,12 @@ export const saveUserInfo = (data, token) =>
   fetch('/customer/save-user-info', data, 'POST', token)
 
 /**
+ * 修改密码
+ */
+export const changePassword = (data, token) =>
+  fetch('/customer/change-password', data, 'POST', token)
+
+/**
  * 退出
  */
 

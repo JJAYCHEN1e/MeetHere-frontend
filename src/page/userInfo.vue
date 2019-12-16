@@ -26,6 +26,10 @@
           <span>{{ userInfo.registeredTime }}</span>
         </el-form-item>
       </el-form>
+      <div class="change_password">
+        <el-button type="primary"
+                   @click="changePasswordDialogVisible = true">修改密码</el-button>
+      </div>
       <div class="save_button">
         <el-button type="success"
                    icon="el-icon-check"
@@ -33,6 +37,38 @@
                    @click="save('userInfoForm')"></el-button>
       </div>
     </div>
+
+    <el-dialog title="修改密码"
+               :visible.sync="changePasswordDialogVisible"
+               width="30%">
+      <el-form :model="changePasswordForm"
+               :rules="rules"
+               ref="changePasswordForm"
+               label-position="left"
+               label-width="100px">
+        <el-form-item label="原密码"
+                      prop="oldPassword">
+          <el-input type="password"
+                    v-model="changePasswordForm.oldPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码"
+                      prop="newPassword">
+          <el-input type="password"
+                    v-model="changePasswordForm.newPassword"></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码"
+                      prop="newPasswordConfirm">
+          <el-input type="password"
+                    v-model="changePasswordForm.newPasswordConfirm"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="changePasswordDialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="sendChangePasswordForm('changePasswordForm')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -40,7 +76,7 @@
 import headTop from '../components/headTop'
 import { mapState, mapMutations } from 'vuex'
 import { baseUrl, baseImgPath } from '@/config/env'
-import { saveUserInfo } from '@/api/getData'
+import { saveUserInfo, changePassword } from '@/api/getData'
 
 export default {
   data() {
@@ -50,6 +86,12 @@ export default {
         phoneNumber: this.$store.state.userInfo.phoneNumber,
         userName: this.$store.state.userInfo.userName
       },
+      changePasswordForm: {
+        oldPassword: '',
+        newPassword: '',
+        newPasswordConfirm: ''
+      },
+      changePasswordDialogVisible: false,
       rules: {
         userName: [
           {
@@ -70,6 +112,37 @@ export default {
             pattern: /^1[34578]\d{9}$/, // 正则表达式
             message: '目前只支持中国大陆的手机号码',
             trigger: 'blur'
+          }
+        ],
+        oldPassword: [
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          {
+            min: 6,
+            max: 20,
+            message: '原密码长度应在 6 到 20 个字符',
+            trigger: 'blur'
+          }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          {
+            min: 6,
+            max: 20,
+            message: '新密码长度应在 6 到 20 个字符',
+            trigger: 'blur'
+          }
+        ],
+        newPasswordConfirm: [
+          { required: true, message: '请确认新密码', trigger: 'blur' },
+          {
+            validator: (rule, value, callback) => {
+              if (value != this.changePasswordForm.newPassword) {
+                callback(new Error('密码不一致'))
+              } else {
+                callback()
+              }
+            },
+            trigger: ['change', 'blur']
           }
         ]
       }
@@ -105,7 +178,31 @@ export default {
             console.log(res.message)
           }
         } else {
-          console.log('注册表单验证错误')
+          console.log('表单验证错误')
+          return false
+        }
+      })
+    },
+    sendChangePasswordForm(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          const res = await changePassword(
+            {
+              customerId: this.userInfo.customerId,
+              password: this.changePasswordForm.oldPassword,
+              newPassword: this.changePasswordForm.newPasswordConfirm
+            },
+            this.token
+          )
+          if (res.code == 0) {
+            alert('修改成功!')
+            this.changePasswordDialogVisible = false
+          } else if (res.code == -1) {
+            alert('修改失败：' + res.message)
+            console.log(res.message)
+          }
+        } else {
+          console.log('表单验证错误')
           return false
         }
       })
@@ -130,7 +227,11 @@ export default {
   text-align: center;
 }
 .save_button {
-  margin: 20px auto 0;
+  // margin: 20px auto 0;
   text-align: center;
+}
+.change_password {
+  // margin: 20px auto 0;
+  text-align: right;
 }
 </style>
