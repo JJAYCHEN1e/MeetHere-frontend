@@ -38,7 +38,7 @@
 
 <script>
 import headTop from '../components/headTop'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { baseUrl, baseImgPath } from '@/config/env'
 import { saveUserInfo } from '@/api/getData'
 
@@ -83,6 +83,7 @@ export default {
     ...mapState(['userInfo', 'token'])
   },
   methods: {
+    ...mapMutations(['setUserName', 'setPhoneNumber']),
     save(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
@@ -96,6 +97,9 @@ export default {
           )
           if (res.code == 0) {
             alert('保存成功!')
+            this.setUserName(this.userInfoForm.userName)
+            this.setPhoneNumber(this.userInfoForm.phoneNumber)
+            console.log(this.userInfo.userName)
           } else if (res.code == -1) {
             alert('保存失败')
             console.log(res.message)

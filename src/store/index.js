@@ -26,7 +26,16 @@ const mutations = {
       state.adminInfo = LoginInfo
     }
     state.token = token
-    console.log(token)
+  },
+  setUserName(state, userName) {
+    if (state.userType == 0) {
+      state.userInfo.userName = userName
+    }
+  },
+  setPhoneNumber(state, phoneNumebr) {
+    if (state.userType == 0) {
+      state.userInfo.phoneNumebr = phoneNumebr
+    }
   }
 }
 
