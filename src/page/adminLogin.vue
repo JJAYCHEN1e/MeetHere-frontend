@@ -11,7 +11,7 @@
                    :rules="rules"
                    ref="loginForm">
             <el-form-item>
-              <p class="title">登录</p>
+              <p class="title">管理员登录</p>
             </el-form-item>
             <el-form-item prop="email">
               <el-input v-model="loginForm.email"
@@ -29,37 +29,23 @@
                          @click="login('loginForm')"
                          class="submit_btn">登陆</el-button>
             </el-form-item>
-            <el-form-item>
-              <el-button type="success"
-                         @click="setDialogVisible()"
-                         class="submit_btn">注册</el-button>
-            </el-form-item>
           </el-form>
-          <!-- <p class="tip">温馨提示：</p> -->
         </section>
       </transition>
     </div>
-    <SignUp v-bind:dialogVisible="signUpDialogVisible"
-            v-on:updateDialogVisible="updateDialogVisible"></SignUp>
   </div>
 </template>
 
 <script>
 import { login } from '@/api/getData'
 import { mapMutations, mapState } from 'vuex'
-import SignUp from '@/components/SignUp.vue'
-
 export default {
-  components: {
-    SignUp
-  },
   data() {
     return {
       loginForm: {
         email: '',
         password: ''
       },
-      signUpDialogVisible: false,
       rules: {
         email: [{ required: true, message: '请输入邮箱地址', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
@@ -68,16 +54,10 @@ export default {
   },
   methods: {
     ...mapMutations(['saveLoginInfo']),
-    setDialogVisible() {
-      this.signUpDialogVisible = true
-    },
-    updateDialogVisible(newValue) {
-      this.signUpDialogVisible = newValue
-    },
     async login(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const res = await login({
+          const res = await adminLogin({
             email: this.loginForm.email,
             password: this.loginForm.password
           })
@@ -88,17 +68,16 @@ export default {
               message: '登录成功'
             })
             this.saveLoginInfo({
-              userType: 0,
+              userType: 1,
               LoginInfo: {
-                customerId: res.data['customerId'],
+                adminId: res.data['adminId'],
                 email: res.data['email'],
-                phoneNumber: res.data['phoneNumber'],
-                userName: res.data['userName'],
-                registeredTime: res.data['registeredTime']
+                phoneNumebr: res.data['phoneNumber'],
+                adminName: res.data['adminName']
               },
               token: res.data['token']
             })
-            this.$router.push('userMain')
+            this.$router.push('manage')
           } else if (res.code == -1) {
             this.$message({
               type: 'error',
@@ -136,8 +115,8 @@ export default {
   }
 }
 .form_contianer {
-  .wh(320px, 290px);
-  .ctp(320px, 290px);
+  .wh(320px, 230px);
+  .ctp(320px, 230px);
   padding: 25px;
   border-radius: 5px;
   text-align: center;

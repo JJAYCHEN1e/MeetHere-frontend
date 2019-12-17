@@ -1,5 +1,6 @@
 import fetch from '@/config/fetch'
 
+/* ============= /customer ============= */
 /**
  * 获取邮件验证码
  */
@@ -27,6 +28,20 @@ export const saveUserInfo = (data, token) =>
  */
 export const changePassword = (data, token) =>
   fetch('/customer/change-password', data, 'POST', token)
+
+/* ============= /admin ============= */
+
+/**
+ * 管理员登陆
+ */
+
+export const adminLogin = data => fetch('/admin/login', data, 'POST')
+
+/**
+ * 获取注册的用户个数
+ */
+export const getUserCount = (data, token) =>
+  fetch('/admin/get-user-count', data, 'GET', token)
 
 /**
  * 退出
@@ -216,12 +231,6 @@ export const deleteFood = food_id =>
  */
 
 export const getUserList = data => fetch('/v1/users/list', data)
-
-/**
- * 获取用户数量
- */
-
-export const getUserCount = data => fetch('/v1/users/count', data)
 
 /**
  * 获取订单列表

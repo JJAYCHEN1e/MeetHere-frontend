@@ -13,7 +13,12 @@ const state = {
     userName: '',
     registeredTime: ''
   },
-  adminInfo: {},
+  adminInfo: {
+    adminId: '',
+    email: '',
+    phoneNumebr: '',
+    adminName: ''
+  },
   token: ''
 }
 
