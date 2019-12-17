@@ -5,8 +5,6 @@
               style="min-height: 100%; background-color: #324057;">
         <el-menu default-active="2"
                  class="el-menu-vertical-demo"
-                 @open="handleOpen"
-                 @close="handleClose"
                  background-color="#324057"
                  text-color="#fff"
                  active-text-color="#20A0FF"

@@ -25,9 +25,7 @@ router.beforeEach((to, from, next) => {
   } else if (
     to.matched.some(record => record.meta.some(meta => meta.requireAuth == 0))
   ) {
-    console.log(storeIndex)
     if (storeIndex.state['userType'] == 0) {
-      console.log(storeIndex.userType)
       next()
       return
     } else {
