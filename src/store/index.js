@@ -15,7 +15,6 @@ const mutations = {
       Vue.set(state, 'adminInfo', LoginInfo)
     }
     Vue.set(state, 'token', token)
-    console.log(state)
   },
   setUserName(state, userName) {
     if (state.userType == 0) {

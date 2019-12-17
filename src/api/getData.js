@@ -4,7 +4,7 @@ import fetch from '@/config/fetch'
 /**
  * 获取邮件验证码
  */
-export const getCode = data => fetch('/customer/check-code', data, 'GET')
+export const getCode = data => fetch('/customer/check-code', data)
 
 /**
  * 注册
@@ -40,8 +40,14 @@ export const adminLogin = data => fetch('/admin/login', data, 'POST')
 /**
  * 获取注册的用户个数
  */
-export const getUserCount = data => fetch('/admin/get-user-count', data, 'GET')
+export const getUserCount = data => fetch('/admin/get-user-count', data)
 
+/**
+ * 获取用户列表
+ */
+export const getUserList = data => fetch('/admin/get-user-list', data)
+
+/* ============= OLD API ============= */
 /**
  * 退出
  */
@@ -224,12 +230,6 @@ export const updateFood = data => fetch('/shopping/v2/updatefood', data, 'POST')
 
 export const deleteFood = food_id =>
   fetch('/shopping/v2/food/' + food_id, {}, 'DELETE')
-
-/**
- * 获取用户列表
- */
-
-export const getUserList = data => fetch('/v1/users/list', data)
 
 /**
  * 获取订单列表

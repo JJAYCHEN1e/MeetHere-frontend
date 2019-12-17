@@ -54,7 +54,8 @@ export default {
           customerId: 2,
           registeredTime: '2019-12-17',
           userName: '陈俊杰',
-          email: '705276106@qq.com'
+          email: '705276106@qq.com',
+          phoneNumber: '18000000000'
         }
       ],
       currentRow: null,
@@ -73,9 +74,9 @@ export default {
   methods: {
     async initData() {
       try {
-        const countData = await getUserCount()
-        if (countData.status == 1) {
-          this.count = countData.count
+        const res = await getUserCount()
+        if (res.code == 0) {
+          this.count = parseInt(res.data['count'])
         } else {
           throw new Error('获取数据失败')
         }
@@ -93,18 +94,25 @@ export default {
       this.getUsers()
     },
     async getUsers() {
-      const Users = await getUserList({
+      const res = await getUserList({
         offset: this.offset,
         limit: this.limit
       })
-      this.tableData = []
-      Users.forEach(item => {
-        const tableData = {}
-        tableData.userName = item.userName
-        tableData.registeredTime = item.registeredTime
-        tableData.email = item.email
-        this.tableData.push(tableData)
-      })
+      console.log(res)
+      if (res.code == 0) {
+        this.tableData = []
+        res.data.forEach(item => {
+          const tableItem = {}
+          tableItem.customerId = item.customerId
+          tableItem.registeredTime = item.registeredTime
+          tableItem.userName = item.userName
+          tableItem.email = item.email
+          tableItem.phoneNumber = item.phoneNumber
+          this.tableData.push(tableItem)
+        })
+      } else if (res.code == 1) {
+        console.log('获取用户列表失败')
+      }
     }
   }
 }
