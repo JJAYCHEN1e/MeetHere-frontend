@@ -5,9 +5,10 @@ export default async (
   url = '',
   data = {},
   type = 'GET',
-  token = store.state['TOKEN'],
+  token = store.state['token'],
   method = 'fetch'
 ) => {
+  console.log(store)
   type = type.toUpperCase()
   url = baseUrl + url
 
