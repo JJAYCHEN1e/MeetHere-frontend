@@ -3,22 +3,13 @@
     <head-top></head-top>
     <el-scrollbar class="m-scroll" style="height: 100%">
       <el-row>
-        <el-col
-          :span="4"
-          v-for="(o, index) in 10"
-          :key="o"
-          :offset="index > 0 ? 2 : 0"
-          style="margin: 50px"
-        >
+        <el-col :span="4" v-for="(stadium, o) in stadiums" :key="o" style="margin: 50px">
           <el-card :body-style="{ padding: '0px' }" shadow="hover" style="width: 250px">
-            <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              class="image"
-            />
+            <img :src="stadium.picture" class="image" />
             <div style="padding: 14px;">
-              <span>中北自习室</span>
+              <span>{{ stadium.name }}</span>
               <br />
-              <span>中北自习室不允许携带食物入内</span>
+              <span>{{ stadium.description }}</span>
               <div class="bottom clearfix">
                 <el-button type="text" class="button" @click="setCommentDialogVisible()">详情</el-button>
               </div>
@@ -42,9 +33,10 @@
 </template>
 
 <script>
-import headTop from "../components/headTop";
-import comment from "@/components/comment.vue";
-import booking from "@/components/booking.vue";
+import headTop from '../components/headTop'
+import comment from '@/components/comment.vue'
+import booking from '@/components/booking.vue'
+import { getStadiumList } from '@/api/getData'
 export default {
   components: {
     headTop,
@@ -53,32 +45,61 @@ export default {
   },
   data() {
     return {
-      commentDialogVisible: false, 
-      bookingDialogVisible: false
-    };
+      commentDialogVisible: false,
+      bookingDialogVisible: false,
+      stadiumInfo: [
+        {
+          name: '中北自习室',
+          description: '中北自习室不允许携带食物入内',
+          picture: ''
+        }
+      ],
+      stadiums: []
+    }
+  },
+  created() {
+    console.log('fjdiajfodjaifojsiodjo')
+    this.getStadiums()
   },
   methods: {
     setCommentDialogVisible() {
-      this.commentDialogVisible = true;
+      this.commentDialogVisible = true
     },
     updateCommentDialogVisible(newValue) {
-      this.commentDialogVisible = newValue;
+      this.commentDialogVisible = newValue
     },
     setBookingDialogVisible() {
-      this.bookingDialogVisible = true;
+      this.bookingDialogVisible = true
     },
     updateBookingDialogVisible(newValue) {
-      this.bookingDialogVisible = newValue;
+      this.bookingDialogVisible = newValue
     },
+    async getStadiums() {
+      const res = await getStadiumList()
+      console.log(res)
+      if (res.code == 0) {
+        this.stadiums = []
+        res.data.forEach(item => {
+          const element = {}
+          element.name = item.stadiumName
+          element.description = item.description
+          element.picture = item.picture
+          this.stadiums.push(element)
+        })
+      } else if (res.code == 1) {
+        console.log('获取场馆列表失败')
+      }
+    },
+    //it's a test...
     test: function() {
-      alert("you hit me??");
+      console.log('1jidjsaofidj')
     }
   }
-};
+}
 </script>
 
 <style lang="less">
-@import "../style/mixin";
+@import '../style/mixin';
 
 .bottom {
   margin-top: 13px;
@@ -99,7 +120,7 @@ export default {
 .clearfix:before,
 .clearfix:after {
   display: table;
-  content: "";
+  content: '';
 }
 
 .clearfix:after {

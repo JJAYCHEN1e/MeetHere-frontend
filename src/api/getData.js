@@ -47,6 +47,11 @@ export const getUserCount = data => fetch('/admin/get-user-count', data)
  */
 export const getUserList = data => fetch('/admin/get-user-list', data)
 
+/**
+ * 获取所有场馆信息
+ */
+export const getStadiumList = data => fetch("/stadium/items", data)
+
 /* ============= OLD API ============= */
 /**
  * 退出
