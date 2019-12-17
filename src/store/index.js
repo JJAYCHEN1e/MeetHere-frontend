@@ -4,33 +4,19 @@ import { getAdminInfo } from '@/api/getData'
 
 Vue.use(Vuex)
 
-const state = {
-  userType: '',
-  userInfo: {
-    custumerId: '',
-    email: '',
-    phoneNumebr: '',
-    userName: '',
-    registeredTime: ''
-  },
-  adminInfo: {
-    adminId: '',
-    email: '',
-    phoneNumebr: '',
-    adminName: ''
-  },
-  token: ''
-}
+const state = {}
 
 const mutations = {
   saveLoginInfo(state, { userType, LoginInfo, token }) {
-    state.userType = userType
+    state = {}
+    Vue.set(state, 'userType', userType)
+
     if (userType == 0) {
-      state.userInfo = LoginInfo
+      Vue.set(state, 'userInfo', LoginInfo)
     } else {
-      state.adminInfo = LoginInfo
+      Vue.set(state, 'adminInfo', LoginInfo)
     }
-    state.token = token
+    Vue.set(state, 'token', token)
   },
   setUserName(state, userName) {
     if (state.userType == 0) {
