@@ -48,31 +48,54 @@ const adminLogin = r =>
 const routes = [
   {
     path: '/',
-    component: login
+    component: login,
+    meta: []
   },
   {
     path: '/adminLogin',
-    component: adminLogin
+    component: adminLogin,
+    meta: []
   },
   {
     path: '/customer',
     component: customer,
     name: '',
+    meta: [
+      {
+        requireAuth: 0
+      }
+    ],
     children: [
       {
         path: '',
         component: home,
-        meta: []
+        meta: [
+          {
+            requireAuth: 0
+          }
+        ]
       },
       {
         path: 'stadium',
         component: stadium,
-        meta: ['场馆', '场馆介绍']
+        meta: [
+          '场馆',
+          '场馆介绍',
+          {
+            requireAuth: 0
+          }
+        ]
       },
       {
         path: 'userInfo',
         component: userInfo,
-        meta: ['我的', '我的信息']
+        meta: [
+          '我的',
+          '我的信息',
+          {
+            requireAuth: 0
+          }
+        ]
       }
     ]
   },
@@ -80,91 +103,196 @@ const routes = [
     path: '/manage',
     component: manage,
     name: '',
+    meta: [
+      {
+        requireAuth: 1
+      }
+    ],
     children: [
       {
         path: '',
         component: home,
-        meta: []
+        meta: [
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'addShop',
         component: addShop,
-        meta: ['添加数据', '添加商铺']
+        meta: [
+          '添加数据',
+          '添加商铺',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'addGoods',
         component: addGoods,
-        meta: ['添加数据', '添加商品']
+        meta: [
+          '添加数据',
+          '添加商品',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'userList',
         component: userList,
-        meta: ['数据管理', '用户列表']
+        meta: [
+          '数据管理',
+          '用户列表',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'shopList',
         component: shopList,
-        meta: ['数据管理', '商家列表']
+        meta: [
+          '数据管理',
+          '商家列表',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'foodList',
         component: foodList,
-        meta: ['数据管理', '食品列表']
+        meta: [
+          '数据管理',
+          '食品列表',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'orderList',
         component: orderList,
-        meta: ['数据管理', '订单列表']
+        meta: [
+          '数据管理',
+          '订单列表',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'adminList',
         component: adminList,
-        meta: ['数据管理', '管理员列表']
+        meta: [
+          '数据管理',
+          '管理员列表',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'visitor',
         component: visitor,
-        meta: ['图表', '用户分布']
+        meta: [
+          '图表',
+          '用户分布',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'newMember',
         component: newMember,
-        meta: ['图表', '用户数据']
+        meta: [
+          '图表',
+          '用户数据',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'uploadImg',
         component: uploadImg,
-        meta: ['文本编辑', 'MarkDown']
+        meta: [
+          '文本编辑',
+          'MarkDown',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'vueEdit',
         component: vueEdit,
-        meta: ['编辑', '文本编辑']
+        meta: [
+          '编辑',
+          '文本编辑',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'adminSet',
         component: adminSet,
-        meta: ['设置', '管理员设置']
+        meta: [
+          '设置',
+          '管理员设置',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'sendMessage',
         component: sendMessage,
-        meta: ['设置', '发送通知']
+        meta: [
+          '设置',
+          '发送通知',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'explain',
         component: explain,
-        meta: ['说明', '说明']
+        meta: [
+          '说明',
+          '说明',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'stadium',
         component: stadium,
-        meta: ['场馆', '场馆介绍']
+        meta: [
+          '场馆',
+          '场馆介绍',
+          {
+            requireAuth: 1
+          }
+        ]
       },
       {
         path: 'userInfo',
         component: userInfo,
-        meta: ['我的', '我的信息']
+        meta: [
+          '我的',
+          '我的信息',
+          {
+            requireAuth: 1
+          }
+        ]
       }
     ]
   }
