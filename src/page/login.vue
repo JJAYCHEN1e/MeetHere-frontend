@@ -98,7 +98,7 @@ export default {
               },
               token: res.data['token']
             })
-            this.$router.push('userMain')
+            this.$router.push('customer')
           } else if (res.code == -1) {
             this.$message({
               type: 'error',

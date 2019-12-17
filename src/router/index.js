@@ -4,8 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login')
-const userMain = r =>
-  require.ensure([], () => r(require('@/page/userMain')), 'userMain')
+const customer = r =>
+  require.ensure([], () => r(require('@/page/customer')), 'customer')
 const manage = r =>
   require.ensure([], () => r(require('@/page/manage')), 'manage')
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home')
@@ -55,8 +55,8 @@ const routes = [
     component: adminLogin
   },
   {
-    path: '/userMain',
-    component: userMain,
+    path: '/customer',
+    component: customer,
     name: '',
     children: [
       {
@@ -65,12 +65,12 @@ const routes = [
         meta: []
       },
       {
-        path: '/stadium',
+        path: 'stadium',
         component: stadium,
         meta: ['场馆', '场馆介绍']
       },
       {
-        path: '/userInfo',
+        path: 'userInfo',
         component: userInfo,
         meta: ['我的', '我的信息']
       }
@@ -87,82 +87,82 @@ const routes = [
         meta: []
       },
       {
-        path: '/addShop',
+        path: 'addShop',
         component: addShop,
         meta: ['添加数据', '添加商铺']
       },
       {
-        path: '/addGoods',
+        path: 'addGoods',
         component: addGoods,
         meta: ['添加数据', '添加商品']
       },
       {
-        path: '/userList',
+        path: 'userList',
         component: userList,
         meta: ['数据管理', '用户列表']
       },
       {
-        path: '/shopList',
+        path: 'shopList',
         component: shopList,
         meta: ['数据管理', '商家列表']
       },
       {
-        path: '/foodList',
+        path: 'foodList',
         component: foodList,
         meta: ['数据管理', '食品列表']
       },
       {
-        path: '/orderList',
+        path: 'orderList',
         component: orderList,
         meta: ['数据管理', '订单列表']
       },
       {
-        path: '/adminList',
+        path: 'adminList',
         component: adminList,
         meta: ['数据管理', '管理员列表']
       },
       {
-        path: '/visitor',
+        path: 'visitor',
         component: visitor,
         meta: ['图表', '用户分布']
       },
       {
-        path: '/newMember',
+        path: 'newMember',
         component: newMember,
         meta: ['图表', '用户数据']
       },
       {
-        path: '/uploadImg',
+        path: 'uploadImg',
         component: uploadImg,
         meta: ['文本编辑', 'MarkDown']
       },
       {
-        path: '/vueEdit',
+        path: 'vueEdit',
         component: vueEdit,
         meta: ['编辑', '文本编辑']
       },
       {
-        path: '/adminSet',
+        path: 'adminSet',
         component: adminSet,
         meta: ['设置', '管理员设置']
       },
       {
-        path: '/sendMessage',
+        path: 'sendMessage',
         component: sendMessage,
         meta: ['设置', '发送通知']
       },
       {
-        path: '/explain',
+        path: 'explain',
         component: explain,
         meta: ['说明', '说明']
       },
       {
-        path: '/stadium',
+        path: 'stadium',
         component: stadium,
         meta: ['场馆', '场馆介绍']
       },
       {
-        path: '/userInfo',
+        path: 'userInfo',
         component: userInfo,
         meta: ['我的', '我的信息']
       }
