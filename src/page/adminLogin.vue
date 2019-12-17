@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { login } from '@/api/getData'
+import { adminLogin } from '@/api/getData'
 import { mapMutations, mapState } from 'vuex'
 export default {
   data() {
@@ -74,7 +74,8 @@ export default {
                 email: res.data['email'],
                 phoneNumebr: res.data['phoneNumber'],
                 adminName: res.data['adminName']
-              }
+              },
+              token: res.data['token']
             })
             this.$router.push('manage')
           } else if (res.code == -1) {
