@@ -95,7 +95,8 @@ export default {
                 phoneNumber: res.data['phoneNumber'],
                 userName: res.data['userName'],
                 registeredTime: res.data['registeredTime']
-              }
+              },
+              token: res.data['token']
             })
             this.$router.push('customer')
           } else if (res.code == -1) {
