@@ -12,7 +12,7 @@ export const getCode = data => fetch('/customer/check-code', data, 'GET')
 export const register = data => fetch('/customer/register', data, 'POST')
 
 /**
- * 登陆
+ * 登录
  */
 
 export const login = data => fetch('/customer/login', data, 'POST')
@@ -32,7 +32,7 @@ export const changePassword = data =>
 /* ============= /admin ============= */
 
 /**
- * 管理员登陆
+ * 管理员登录
  */
 
 export const adminLogin = data => fetch('/admin/login', data, 'POST')
