@@ -3,7 +3,7 @@
 
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/manage' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="(item, index) in $route.meta"
+      <el-breadcrumb-item v-for="(item, index) in $route.meta.slice(0,$route.meta.length-1)"
                           :key="index">{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-dropdown @command="handleCommand"
