@@ -1,10 +1,11 @@
 import { baseUrl } from './env'
+import store from '../store/index'
 
 export default async (
   url = '',
   data = {},
   type = 'GET',
-  token = '',
+  token = store.state['TOKEN'],
   method = 'fetch'
 ) => {
   type = type.toUpperCase()

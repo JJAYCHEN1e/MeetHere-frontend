@@ -20,14 +20,14 @@ export const login = data => fetch('/customer/login', data, 'POST')
 /**
  * 保存用户信息
  */
-export const saveUserInfo = (data, token) =>
-  fetch('/customer/save-user-info', data, 'POST', token)
+export const saveUserInfo = data =>
+  fetch('/customer/save-user-info', data, 'POST')
 
 /**
  * 修改密码
  */
-export const changePassword = (data, token) =>
-  fetch('/customer/change-password', data, 'POST', token)
+export const changePassword = data =>
+  fetch('/customer/change-password', data, 'POST')
 
 /* ============= /admin ============= */
 
@@ -40,8 +40,7 @@ export const adminLogin = data => fetch('/admin/login', data, 'POST')
 /**
  * 获取注册的用户个数
  */
-export const getUserCount = (data, token) =>
-  fetch('/admin/get-user-count', data, 'GET', token)
+export const getUserCount = data => fetch('/admin/get-user-count', data, 'GET')
 
 /**
  * 退出

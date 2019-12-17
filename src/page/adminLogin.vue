@@ -74,8 +74,7 @@ export default {
                 email: res.data['email'],
                 phoneNumebr: res.data['phoneNumber'],
                 adminName: res.data['adminName']
-              },
-              token: res.data['token']
+              }
             })
             this.$router.push('manage')
           } else if (res.code == -1) {

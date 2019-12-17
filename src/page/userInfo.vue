@@ -153,21 +153,18 @@ export default {
   },
   computed: {
     // 使用对象展开运算符将此对象混入到外部对象中
-    ...mapState(['userInfo', 'token'])
+    ...mapState(['userInfo'])
   },
   methods: {
     ...mapMutations(['setUserName', 'setPhoneNumber']),
     save(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const res = await saveUserInfo(
-            {
-              customerId: this.userInfo.customerId,
-              userName: this.userInfoForm.userName,
-              phoneNumber: this.userInfoForm.phoneNumber
-            },
-            this.token
-          )
+          const res = await saveUserInfo({
+            customerId: this.userInfo.customerId,
+            userName: this.userInfoForm.userName,
+            phoneNumber: this.userInfoForm.phoneNumber
+          })
           if (res.code == 0) {
             alert('保存成功!')
             this.setUserName(this.userInfoForm.userName)
@@ -186,14 +183,11 @@ export default {
     sendChangePasswordForm(formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          const res = await changePassword(
-            {
-              customerId: this.userInfo.customerId,
-              password: this.changePasswordForm.oldPassword,
-              newPassword: this.changePasswordForm.newPasswordConfirm
-            },
-            this.token
-          )
+          const res = await changePassword({
+            customerId: this.userInfo.customerId,
+            password: this.changePasswordForm.oldPassword,
+            newPassword: this.changePasswordForm.newPasswordConfirm
+          })
           if (res.code == 0) {
             alert('修改成功!')
             this.changePasswordDialogVisible = false
