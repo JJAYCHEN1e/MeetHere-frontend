@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { getAdminInfo } from '@/api/getData'
-
 Vue.use(Vuex)
 
 const state = {}
 
 const mutations = {
   saveLoginInfo(state, { userType, LoginInfo, token }) {
-    state = {}
+    this.commit('clearState')
     Vue.set(state, 'userType', userType)
 
     if (userType == 0) {
@@ -17,6 +15,7 @@ const mutations = {
       Vue.set(state, 'adminInfo', LoginInfo)
     }
     Vue.set(state, 'token', token)
+    console.log(state)
   },
   setUserName(state, userName) {
     if (state.userType == 0) {
@@ -26,6 +25,11 @@ const mutations = {
   setPhoneNumber(state, phoneNumebr) {
     if (state.userType == 0) {
       state.userInfo.phoneNumebr = phoneNumebr
+    }
+  },
+  clearState(state) {
+    for (let key in state) {
+      delete state[key]
     }
   }
 }
