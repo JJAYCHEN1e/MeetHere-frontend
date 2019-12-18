@@ -11,10 +11,18 @@
               <br />
               <span>{{ stadium.description }}</span>
               <div class="bottom clearfix">
-                <el-button type="text" class="button" @click="setCommentDialogVisible(stadium.id)">详情</el-button>
+                <el-button
+                  type="text"
+                  class="button"
+                  @click="setCommentDialogVisible(stadium.id)"
+                >详情</el-button>
               </div>
               <div class="bottom clearfix">
-                <el-button type="text" class="button" @click="setBookingDialogVisible(stadium.id)">预约</el-button>
+                <el-button
+                  type="text"
+                  class="button"
+                  @click="setBookingDialogVisible(stadium.id)"
+                >预约</el-button>
               </div>
             </div>
           </el-card>
@@ -39,6 +47,7 @@ import headTop from '../components/headTop'
 import comment from '@/components/comment.vue'
 import booking from '@/components/booking.vue'
 import { getStadiumList } from '@/api/getData'
+
 export default {
   components: {
     headTop,
@@ -50,7 +59,8 @@ export default {
       commentDialogVisible: false,
       bookingDialogVisible: false,
       clickedStadiumId: 0,
-      stadiums: []
+      stadiums: [],
+      selectStadium: {}
     }
   },
   created() {
@@ -65,7 +75,7 @@ export default {
       this.commentDialogVisible = newValue
     },
     setBookingDialogVisible(stadiumId) {
-      this.clickedStadiumId = stadiumId;
+      this.clickedStadiumId = stadiumId
       this.bookingDialogVisible = true
     },
     updateBookingDialogVisible(newValue) {
@@ -87,7 +97,7 @@ export default {
       } else if (res.code == 1) {
         console.log('获取场馆列表失败')
       }
-    },
+    }
   }
 }
 </script>
