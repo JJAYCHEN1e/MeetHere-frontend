@@ -6,6 +6,7 @@
                 highlight-current-row
                 style="width: 100%">
         <el-table-column property="customerId"
+                         label="ID"
                          width="100">
         </el-table-column>
         <el-table-column property="registeredTime"
@@ -22,11 +23,17 @@
         <el-table-column property="phoneNumber"
                          label="手机号码">
         </el-table-column>
-        <el-table-column label="操作">
-          <el-button type="danger"
-                     icon="el-icon-delete"
-                     size="small"
-                     circle></el-button>
+        <el-table-column>
+          <template slot="header">
+            <el-input v-model="search"
+                      size="mini"
+                      placeholder="输入关键字搜索" />
+          </template>
+          <template slot-scope="scope">
+            <el-button size="mini"
+                       type="danger"
+                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <div class="Pagination"
@@ -45,7 +52,8 @@
 
 <script>
 import headTop from '../components/headTop'
-import { getUserList, getUserCount } from '@/api/getData'
+import { getUserList, getUserCount, deleteUser } from '@/api/getData'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -62,7 +70,8 @@ export default {
       offset: 0,
       limit: 20,
       count: 0,
-      currentPage: 1
+      currentPage: 1,
+      search: ''
     }
   },
   components: {
@@ -70,6 +79,9 @@ export default {
   },
   created() {
     this.initData()
+  },
+  computed: {
+    ...mapState(['adminInfo'])
   },
   methods: {
     async initData() {
@@ -113,6 +125,28 @@ export default {
       } else if (res.code == 1) {
         console.log('获取用户列表失败')
       }
+    },
+    handleDelete(index, row) {
+      this.$confirm(
+        '确认删除用户 ' +
+          row.customerId +
+          ' ' +
+          row.userName +
+          '(' +
+          row.email +
+          ')?'
+      ).then(async () => {
+        const res = await deleteUser({
+          customerId: row.customerId,
+          adminId: this.adminInfo.adminId
+        })
+        console.log(res)
+        if (res.code == 0) {
+          this.tableData.splice(index, 1)
+        } else if (res.code == 1) {
+          console.log('获取用户列表失败')
+        }
+      })
     }
   }
 }
