@@ -10,8 +10,10 @@ const mutations = {
     Vue.set(state, 'userType', userType)
 
     if (userType == 0) {
+      Vue.set(state, 'homePage', '/customer')
       Vue.set(state, 'userInfo', LoginInfo)
     } else {
+      Vue.set(state, 'homePage', '/manage')
       Vue.set(state, 'adminInfo', LoginInfo)
     }
     Vue.set(state, 'token', token)

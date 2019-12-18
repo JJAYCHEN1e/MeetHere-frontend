@@ -2,7 +2,7 @@
   <div class="header_container">
 
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/manage' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="this.homePage">首页</el-breadcrumb-item>
       <el-breadcrumb-item v-for="(item, index) in $route.meta.slice(0,$route.meta.length-1)"
                           :key="index">{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
@@ -31,7 +31,7 @@ export default {
   },
   created() {},
   computed: {
-    ...mapState(['adminInfo'])
+    ...mapState(['userType', 'adminInfo', 'homePage'])
   },
   methods: {
     ...mapActions(['getAdminData']),
