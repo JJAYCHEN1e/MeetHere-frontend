@@ -54,6 +54,15 @@ export default {
       }
     }
   },
+  created() {
+    if (this.$store.state.userType == 1) {
+      this.$message({
+        type: 'success',
+        message: '检测到您已登录，自动跳转至首页'
+      })
+      this.$router.push('manage')
+    }
+  },
   methods: {
     ...mapMutations(['saveLoginInfo']),
     async login(formName) {
