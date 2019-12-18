@@ -22,6 +22,7 @@
             <el-form-item prop="password">
               <el-input type="password"
                         placeholder="密码"
+                        @keyup.enter.native="login('loginForm')"
                         v-model="loginForm.password"></el-input>
             </el-form-item>
             <el-form-item>
