@@ -1,32 +1,38 @@
 <template>
   <el-dialog title="场馆详情" :visible.sync="currentDialogVisible">
     <span>
-      <b>场馆编号：</b>{{ stadium.id }}
+      <b>场馆编号：</b>
+      {{ stadium.id }}
     </span>
     <br />
     <br />
     <span>
-      <b>场馆名称：</b>你猜
+      <b>场馆名称：</b>
+      {{ stadium.name }}
     </span>
     <br />
     <br />
     <span>
-      <b>场馆地址：</b>123
+      <b>场馆地址：</b>
+      {{ stadium.location }}
     </span>
     <br />
     <br />
     <span>
       <b>场馆描述：</b>
+      {{ stadium.description }}
     </span>
     <br />
     <br />
     <span>
       <b>场馆类型：</b>
+      {{ stadium.type }}
     </span>
     <br />
     <br />
     <span>
       <b>场馆价格：</b>
+      {{ stadium.price }} 元/小时
     </span>
     <br />
     <br />
@@ -35,24 +41,22 @@
     <b>评论</b>
     <br />
     <br />
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>喷子</span>
-        <el-button style="float: right; padding: 3px 0" type="text" v-if="1 === 1">删除</el-button>
-      </div>垃圾垃圾，这个场馆就是个垃圾
-    </el-card>
-    <br />
-    <el-card class="box-card">
-      <div slot="header" class="clearfix">
-        <span>喷子</span>
-        <el-button style="float: right; padding: 3px 0" type="text" v-if="1 === 1">删除</el-button>
-      </div>呵，你怕不是个喷子
-    </el-card>
-    <br />
+    <div v-for="(comment, o) in comments" :key="o">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>{{ comment.userName }}</span> <br>
+          <span>{{ comment.postTime }}</span>
+          <el-button style="float: right; padding: 3px 0" type="text" v-if="userId == comment.userId">删除</el-button>
+        </div>
+        {{ comment.content }}
+      </el-card>
+      <br />
+    </div>
+
     <el-divider></el-divider>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
-        <span>your name</span>
+        <span>{{ userName }}</span>
         <el-button style="float: right; padding: 3px 0" type="text">评论</el-button>
       </div>
       <textarea rows="3" cols="100">
@@ -63,7 +67,7 @@
 </template>
 
 <script>
-import { getStadiumById } from '@/api/getData'
+import { getStadiumById, getCommentsByStadiumId } from '@/api/getData'
 
 export default {
   name: 'comment',
@@ -71,7 +75,10 @@ export default {
   data() {
     return {
       currentDialogVisible: this.dialogVisible,
-      stadium: {}
+      stadium: {},
+      comments: [],
+      userId: this.$store.state.userInfo.customerId,
+      userName: this.$store.state.userInfo.userName
     }
   },
   watch: {
@@ -80,7 +87,6 @@ export default {
       this.currentDialogVisible = newValue
     },
     currentDialogVisible: function(newValue) {
-      // this.initData();
       this.$emit('updateDialogVisible', newValue)
     }
   },
@@ -90,10 +96,36 @@ export default {
         id: this.stadiumId
       })
       console.log(res)
-      if(res.code == 0) {
+      if (res.code == 0) {
         this.stadium.id = res.data.stadiumId
+        this.stadium.name = res.data.stadiumName
+        this.stadium.type = res.data.typeName
+        this.stadium.location = res.data.location
+        this.stadium.description = res.data.description
+        this.stadium.price = res.data.price
+      } else if (res.code == 1) {
+        console.log('数据获取失败')
       }
-    }
+      const commentsRes = await getCommentsByStadiumId({
+        stadiumId: this.stadiumId
+      })
+      console.log(commentsRes)
+      if(commentsRes.code == 0) {
+        this.comments = []
+        commentsRes.data.forEach(item => {
+          const element = {}
+          element.userId = item.customerId
+          element.userName = item.userName
+          element.postTime = item.commentPostTime
+          element.content = item.commentContent
+          element.like = item.like
+          this.comments.push(element)
+        })
+      } else if (res.code == 1) {
+        console.log('数据获取失败')
+      }
+      this.$forceUpdate()
+    },
   }
 }
 </script>

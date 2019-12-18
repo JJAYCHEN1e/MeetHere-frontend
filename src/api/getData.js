@@ -42,6 +42,11 @@ export const getStadiumList = data => fetch('/stadium/items', data)
 
 export const getStadiumById = data => fetch('/stadium/message', data)
 
+/**
+ * 使用场馆id获取对应场馆的评论
+ */
+export const getCommentsByStadiumId = data => fetch('/stadium/comments', data)
+
 /* ============= /admin ============= */
 
 /**
