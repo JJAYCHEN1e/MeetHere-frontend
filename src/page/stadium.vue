@@ -11,10 +11,10 @@
               <br />
               <span>{{ stadium.description }}</span>
               <div class="bottom clearfix">
-                <el-button type="text" class="button" @click="setCommentDialogVisible()">详情</el-button>
+                <el-button type="text" class="button" @click="setCommentDialogVisible(stadium.id)">详情</el-button>
               </div>
               <div class="bottom clearfix">
-                <el-button type="text" class="button" @click="setBookingDialogVisible()">预约</el-button>
+                <el-button type="text" class="button" @click="setBookingDialogVisible(stadium.id)">预约</el-button>
               </div>
             </div>
           </el-card>
@@ -23,10 +23,12 @@
     </el-scrollbar>
     <comment
       v-bind:dialogVisible="commentDialogVisible"
+      v-bind:stadiumId="clickedStadiumId"
       v-on:updateDialogVisible="updateCommentDialogVisible"
     ></comment>
     <booking
       v-bind:dialogVisible="bookingDialogVisible"
+      v-bind:stadiumId="clickedStadiumId"
       v-on:updateDialogVisible="updateBookingDialogVisible"
     ></booking>
   </div>
@@ -47,34 +49,29 @@ export default {
     return {
       commentDialogVisible: false,
       bookingDialogVisible: false,
-      stadiumInfo: [
-        {
-          name: '中北自习室',
-          description: '中北自习室不允许携带食物入内',
-          picture: ''
-        }
-      ],
+      clickedStadiumId: 0,
       stadiums: []
     }
   },
   created() {
-    console.log('fjdiajfodjaifojsiodjo')
-    this.getStadiums()
+    this.initData()
   },
   methods: {
-    setCommentDialogVisible() {
+    setCommentDialogVisible(stadiumId) {
+      this.clickedStadiumId = stadiumId;
       this.commentDialogVisible = true
     },
     updateCommentDialogVisible(newValue) {
       this.commentDialogVisible = newValue
     },
-    setBookingDialogVisible() {
+    setBookingDialogVisible(stadiumId) {
+      this.clickedStadiumId = stadiumId;
       this.bookingDialogVisible = true
     },
     updateBookingDialogVisible(newValue) {
       this.bookingDialogVisible = newValue
     },
-    async getStadiums() {
+    async initData() {
       const res = await getStadiumList()
       console.log(res)
       if (res.code == 0) {
@@ -84,16 +81,13 @@ export default {
           element.name = item.stadiumName
           element.description = item.description
           element.picture = item.picture
+          element.id = item.stadiumId;
           this.stadiums.push(element)
         })
       } else if (res.code == 1) {
         console.log('获取场馆列表失败')
       }
     },
-    //it's a test...
-    test: function() {
-      console.log('1jidjsaofidj')
-    }
   }
 }
 </script>
