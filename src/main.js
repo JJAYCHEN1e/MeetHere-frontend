@@ -11,6 +11,17 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {
+  // 用于刷新时检测，如果刷新则状态会为空，那么重新从sessionStorage中读取出来
+  if (storeIndex.state.userType == undefined && sessionStorage.getItem('store'))
+    storeIndex.replaceState(
+      Object.assign(
+        {},
+        storeIndex.state,
+        JSON.parse(sessionStorage.getItem('store'))
+      )
+    )
+  store.commit('set_token', sessionStorage.getItem('token'))
+
   if (
     to.matched.some(record => record.meta.some(meta => meta.requireAuth == 1))
   ) {
