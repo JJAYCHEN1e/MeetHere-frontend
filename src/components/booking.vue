@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="场馆预定" :visible.sync="currentDialogVisible">
     <span>
-      <b>场馆编号：</b>中文冒号
+      <b>场馆编号：</b>{{ stadiumId }}
     </span>
     <br />
     <br />
@@ -32,7 +32,7 @@
 <script>
 export default {
   name: 'booking',
-  props: ['dialogVisible'],
+  props: ['dialogVisible', 'stadiumId'],
   data() {
     return {
       currentDialogVisible: this.dialogVisible,

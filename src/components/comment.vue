@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="场馆详情" :visible.sync="currentDialogVisible">
     <span>
-      <b>场馆编号：</b>中文冒号
+      <b>场馆编号：</b>{{ stadium.id }}
     </span>
     <br />
     <br />
@@ -63,20 +63,39 @@
 </template>
 
 <script>
+import { getStadiumById } from '@/api/getData'
+
 export default {
   name: 'comment',
-  props: ['dialogVisible'],
+  props: ['dialogVisible', 'stadiumId'],
   data() {
     return {
-      currentDialogVisible: this.dialogVisible
+      currentDialogVisible: this.dialogVisible,
+      stadium: {}
     }
+  },
+  updated() {
+    this.initData();
   },
   watch: {
     dialogVisible: function(newValue) {
+      // this.initData()
       this.currentDialogVisible = newValue
     },
     currentDialogVisible: function(newValue) {
+      // this.initData();
       this.$emit('updateDialogVisible', newValue)
+    }
+  },
+  methods: {
+    async initData() {
+      const res = await getStadiumById({
+        id: this.stadiumId
+      })
+      console.log(res)
+      if(res.code == 0) {
+        this.stadium.id = res.data.stadiumId
+      }
     }
   }
 }
