@@ -74,12 +74,9 @@ export default {
       stadium: {}
     }
   },
-  updated() {
-    this.initData();
-  },
   watch: {
     dialogVisible: function(newValue) {
-      // this.initData()
+      this.initData()
       this.currentDialogVisible = newValue
     },
     currentDialogVisible: function(newValue) {
