@@ -6,22 +6,17 @@
       <el-breadcrumb-item v-for="(item, index) in $route.meta.slice(0,$route.meta.length-1)"
                           :key="index">{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
-    <!-- <el-dropdown @command="handleCommand"
-                 menu-align='start'>
-      <!-- <img :src="baseImgPath + adminInfo.avatar"
-           class="avator"> -->
-    <!-- <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="home">首页</el-dropdown-item>
-        <el-dropdown-item command="signout">退出</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown> -->
+    <el-breadcrumb>
+      <el-button type="text"
+                 class="log_out"
+                 @click="logoutButtonClicked()">退出</el-button>
+    </el-breadcrumb>
   </div>
 </template>
 
 <script>
-import { signout } from '@/api/getData'
 import { baseImgPath } from '@/config/env'
-import { mapActions, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   data() {
@@ -34,25 +29,15 @@ export default {
     ...mapState(['userType', 'adminInfo', 'homePage'])
   },
   methods: {
-    ...mapActions(['getAdminData']),
-    async handleCommand(command) {
-      if (command == 'home') {
-        this.$router.push('/manage')
-      } else if (command == 'signout') {
-        const res = await signout()
-        if (res.status == 1) {
-          this.$message({
-            type: 'success',
-            message: '退出成功'
-          })
-          this.$router.push('/')
-        } else {
-          this.$message({
-            type: 'error',
-            message: res.message
-          })
-        }
-      }
+    ...mapMutations(['logout']),
+    logoutButtonClicked() {
+      if (this.userType == 0) this.$router.push('/')
+      else if (this.userType == 1) this.$router.push('/adminLogin')
+      this.logout()
+      this.$message({
+        type: 'success',
+        message: '退出成功'
+      })
     }
   }
 }
@@ -75,5 +60,11 @@ export default {
 }
 .el-dropdown-menu__item {
   text-align: center;
+}
+
+.log_out {
+  color: #579ef8;
+  font-weight: 600;
+  margin-right: 20px;
 }
 </style>

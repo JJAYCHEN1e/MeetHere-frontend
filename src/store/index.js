@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Router from 'vue-router'
 Vue.use(Vuex)
 
 const state = {}
@@ -32,6 +33,9 @@ const mutations = {
     for (let key in state) {
       delete state[key]
     }
+  },
+  logout(state) {
+    this.commit('clearState')
   }
 }
 
