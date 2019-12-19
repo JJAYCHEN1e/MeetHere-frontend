@@ -18,8 +18,7 @@
             </template>
             <el-menu-item index="/manage/userList">用户列表</el-menu-item>
             <el-menu-item index="/manage/shopList">商家列表</el-menu-item>
-            <el-menu-item index="/manage/foodList">食品列表</el-menu-item>
-            <el-menu-item index="/manage/orderList">订单列表</el-menu-item>
+            <el-menu-item index="/manage/bookingList">订单列表</el-menu-item>
             <el-menu-item index="/manage/adminList">管理员列表</el-menu-item>
           </el-submenu>
           <el-submenu index="3">

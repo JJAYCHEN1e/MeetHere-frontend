@@ -17,10 +17,8 @@ const userList = r =>
   require.ensure([], () => r(require('@/page/userList')), 'userList')
 const shopList = r =>
   require.ensure([], () => r(require('@/page/shopList')), 'shopList')
-const foodList = r =>
-  require.ensure([], () => r(require('@/page/foodList')), 'foodList')
-const orderList = r =>
-  require.ensure([], () => r(require('@/page/orderList')), 'orderList')
+const bookingList = r =>
+  require.ensure([], () => r(require('@/page/bookingList')), 'bookingList')
 const adminList = r =>
   require.ensure([], () => r(require('@/page/adminList')), 'adminList')
 const visitor = r =>
@@ -163,19 +161,8 @@ const routes = [
         ]
       },
       {
-        path: 'foodList',
-        component: foodList,
-        meta: [
-          '数据管理',
-          '食品列表',
-          {
-            requireAuth: 1
-          }
-        ]
-      },
-      {
-        path: 'orderList',
-        component: orderList,
+        path: 'bookingList',
+        component: bookingList,
         meta: [
           '数据管理',
           '订单列表',

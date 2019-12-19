@@ -80,6 +80,22 @@ export const getUserList = data => fetch('/admin/get-user-list', data)
  */
 export const deleteUser = data => fetch('/admin/delete-user', data, 'POST')
 
+/**
+ * 获取订单总数
+ */
+export const getBookingCount = data => fetch('/admin/get-booking-count', data)
+
+/**
+ * 获取订单列表
+ */
+export const getBookingList = data => fetch('/admin/get-booking-list', data)
+
+/*
+ * 删除指定 bookingId 的订单
+ */
+export const deleteBooking = data =>
+  fetch('/admin/delete-booking', data, 'POST')
+
 /* ============= OLD API ============= */
 /**
  * 退出
