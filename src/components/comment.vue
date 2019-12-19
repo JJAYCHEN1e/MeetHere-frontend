@@ -62,9 +62,9 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>{{ userName }}</span>
-        <el-button style="float: right; padding: 3px 0" type="text">评论</el-button>
+        <el-button @click="postComment" style="float: right; padding: 3px 0" type="text">评论</el-button>
       </div>
-      <textarea rows="3" cols="100"></textarea>
+      <textarea rows="3" cols="100" v-model="commentContent"></textarea>
     </el-card>
   </el-dialog>
 </template>
@@ -73,7 +73,8 @@
 import {
   getStadiumById,
   getCommentsByStadiumId,
-  deleteComment
+  deleteComment,
+  postComment
 } from '@/api/getData'
 
 export default {
@@ -86,11 +87,13 @@ export default {
       comments: [],
       userId: this.$store.state.userInfo.customerId,
       userName: this.$store.state.userInfo.userName,
-      userComment: {}
+      userComment: {},
+      commentContent: ''
     }
   },
   watch: {
     dialogVisible: function(newValue) {
+      this.commentContent = ''
       this.initData()
       this.currentDialogVisible = newValue
     },
@@ -99,19 +102,37 @@ export default {
     }
   },
   methods: {
+    async postComment() {
+      if (this.commentContent == '') {
+        this.emptyContentNotify()
+      }
+      const res = await postComment({
+        stadiumId: this.stadiumId,
+        customerId: this.userId,
+        commentContent: this.commentContent
+      })
+      if (res.code == 0) {
+        this.postCommentSuccessNotify()
+        this.initCommentData()
+        this.commentContent = ''
+      } else {
+        this.postCommentFailNotify()
+      }
+    },
     async deleteComment(id) {
       const res = await deleteComment({
         commentId: id
       })
       console.log(res)
       if (res.code == 0) {
-        for(var i = 0; i < this.comments.length; i++) {
+        for (var i = 0; i < this.comments.length; i++) {
           var comment = this.comments[i]
           console.log(this.comments)
           console.log(comment)
-          if(comment.id == id) {
+          if (comment.id == id) {
             this.comments.splice(i, 1)
           }
+          this.deleteCommentSuccessNotify()
         }
         this.$forceUpdate()
       } else {
@@ -123,6 +144,32 @@ export default {
       this.$notify.error({
         title: '错误',
         message: '删除失败'
+      })
+    },
+    deleteCommentSuccessNotify() {
+      this.$notify.info({
+        title: '提示',
+        message: '删除评论成功'
+      })
+    },
+    emptyContentNotify() {
+      this.$notify({
+        title: '警告',
+        message: '评论不可为空',
+        type: 'warning'
+      })
+    },
+    postCommentSuccessNotify() {
+      this.$notify({
+        title: '成功',
+        message: '评论成功',
+        type: 'success'
+      })
+    },
+    postCommentFailNotify() {
+      this.$notify.error({
+        title: '错误',
+        message: '发送失败'
       })
     },
     async initData() {
@@ -140,13 +187,17 @@ export default {
       } else if (res.code == 1) {
         console.log('数据获取失败')
       }
-      const commentsRes = await getCommentsByStadiumId({
+      this.$forceUpdate()
+      this.initCommentData()
+    },
+    async initCommentData() {
+      const res = await getCommentsByStadiumId({
         stadiumId: this.stadiumId
       })
-      console.log(commentsRes)
-      if (commentsRes.code == 0) {
+      console.log(res)
+      if (res.code == 0) {
         this.comments = []
-        commentsRes.data.forEach(item => {
+        res.data.forEach(item => {
           const element = {}
           element.userId = item.customerId
           element.userName = item.userName
@@ -156,7 +207,7 @@ export default {
           element.id = item.commentId
           this.comments.push(element)
         })
-      } else if (res.code == 1) {
+      } else {
         console.log('数据获取失败')
       }
       this.$forceUpdate()
