@@ -44,30 +44,37 @@
     <div v-for="(comment, o) in comments" :key="o">
       <el-card class="box-card">
         <div slot="header" class="clearfix">
-          <span>{{ comment.userName }}</span> <br>
+          <span>{{ comment.userName }}</span>
+          <br />
           <span>{{ comment.postTime }}</span>
-          <el-button style="float: right; padding: 3px 0" type="text" v-if="userId == comment.userId">删除</el-button>
+          <el-button
+            @click="deleteComment(comment.id)"
+            style="float: right; padding: 3px 0"
+            type="text"
+            v-if="userId == comment.userId"
+          >删除</el-button>
         </div>
         {{ comment.content }}
       </el-card>
       <br />
     </div>
-
     <el-divider></el-divider>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>{{ userName }}</span>
         <el-button style="float: right; padding: 3px 0" type="text">评论</el-button>
       </div>
-      <textarea rows="3" cols="100">
-请开始你的发言
-      </textarea>
+      <textarea rows="3" cols="100"></textarea>
     </el-card>
   </el-dialog>
 </template>
 
 <script>
-import { getStadiumById, getCommentsByStadiumId } from '@/api/getData'
+import {
+  getStadiumById,
+  getCommentsByStadiumId,
+  deleteComment
+} from '@/api/getData'
 
 export default {
   name: 'comment',
@@ -78,7 +85,8 @@ export default {
       stadium: {},
       comments: [],
       userId: this.$store.state.userInfo.customerId,
-      userName: this.$store.state.userInfo.userName
+      userName: this.$store.state.userInfo.userName,
+      userComment: {}
     }
   },
   watch: {
@@ -91,6 +99,32 @@ export default {
     }
   },
   methods: {
+    async deleteComment(id) {
+      const res = await deleteComment({
+        commentId: id
+      })
+      console.log(res)
+      if (res.code == 0) {
+        for(var i = 0; i < this.comments.length; i++) {
+          var comment = this.comments[i]
+          console.log(this.comments)
+          console.log(comment)
+          if(comment.id == id) {
+            this.comments.splice(i, 1)
+          }
+        }
+        this.$forceUpdate()
+      } else {
+        console.log('删除失败')
+        this.deleteCommentFailNotify()
+      }
+    },
+    deleteCommentFailNotify() {
+      this.$notify.error({
+        title: '错误',
+        message: '删除失败'
+      })
+    },
     async initData() {
       const res = await getStadiumById({
         id: this.stadiumId
@@ -110,7 +144,7 @@ export default {
         stadiumId: this.stadiumId
       })
       console.log(commentsRes)
-      if(commentsRes.code == 0) {
+      if (commentsRes.code == 0) {
         this.comments = []
         commentsRes.data.forEach(item => {
           const element = {}
@@ -118,14 +152,15 @@ export default {
           element.userName = item.userName
           element.postTime = item.commentPostTime
           element.content = item.commentContent
-          element.like = item.like
+          element.likes = item.likes
+          element.id = item.commentId
           this.comments.push(element)
         })
       } else if (res.code == 1) {
         console.log('数据获取失败')
       }
       this.$forceUpdate()
-    },
+    }
   }
 }
 </script>
