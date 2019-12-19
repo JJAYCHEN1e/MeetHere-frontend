@@ -86,7 +86,9 @@ export default {
   methods: {
     async initData() {
       try {
-        const res = await getUserCount()
+        const res = await getUserCount({
+          adminId: this.adminInfo.adminId
+        })
         if (res.code == 0) {
           this.count = parseInt(res.data['count'])
         } else {
@@ -108,7 +110,8 @@ export default {
     async getUsers() {
       const res = await getUserList({
         offset: this.offset,
-        limit: this.limit
+        limit: this.limit,
+        adminId: this.adminInfo.adminId
       })
       console.log(res)
       if (res.code == 0) {
