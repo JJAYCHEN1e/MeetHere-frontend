@@ -47,6 +47,11 @@ export const getStadiumById = data => fetch('/stadium/message', data)
  */
 export const getCommentsByStadiumId = data => fetch('/stadium/comments', data)
 
+/**
+ * 删除该场馆下该评论 
+ */
+export const deleteComment = data => fetch('/stadium/deleteComment', data, 'POST')
+
 /* ============= /admin ============= */
 
 /**
