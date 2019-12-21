@@ -45,12 +45,14 @@ export const getStadiumById = data => fetch('/stadium/message', data)
 /**
  * 使用场馆id获取对应场馆的评论
  */
-export const getCommentsByStadiumId = data => fetch('/comment/get-by-user', data)
+export const getCommentsByStadiumId = data =>
+  fetch('/comment/get-by-user', data)
 
 /**
- * 删除该场馆下该评论 
+ * 删除该场馆下该评论
  */
-export const deleteComment = data => fetch('/comment/delete-by-user', data, 'POST')
+export const deleteComment = data =>
+  fetch('/comment/delete-by-user', data, 'POST')
 
 /**
  * 评论当前场馆
@@ -95,6 +97,12 @@ export const getBookingList = data => fetch('/admin/get-booking-list', data)
  */
 export const deleteBooking = data =>
   fetch('/admin/delete-booking', data, 'POST')
+
+export const getTotalBookingCountForDay = data =>
+  fetch('/admin/booking-count-by-date', data)
+
+export const getToalBookingCountForStadiums = data =>
+  fetch('/admin/booking-count-by-stadium', data)
 
 /* ============= OLD API ============= */
 /**
