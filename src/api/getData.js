@@ -45,17 +45,17 @@ export const getStadiumById = data => fetch('/stadium/message', data)
 /**
  * 使用场馆id获取对应场馆的评论
  */
-export const getCommentsByStadiumId = data => fetch('/stadium/comments', data)
+export const getCommentsByStadiumId = data => fetch('/comment/get-by-user', data)
 
 /**
  * 删除该场馆下该评论 
  */
-export const deleteComment = data => fetch('/stadium/deleteComment', data, 'POST')
+export const deleteComment = data => fetch('/comment/delete-by-user', data, 'POST')
 
 /**
  * 评论当前场馆
  */
-export const postComment = data => fetch('/stadium/addComment', data, 'POST')
+export const postComment = data => fetch('/comment/add', data, 'POST')
 
 /* ============= /admin ============= */
 
