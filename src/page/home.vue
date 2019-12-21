@@ -3,35 +3,6 @@
     <head-top></head-top>
     <section class="data_section">
       <header class="section_title">数据统计</header>
-      <el-row :gutter="20"
-              style="margin-bottom: 10px;">
-        <el-col :span="4">
-          <div class="data_list today_head"><span class="data_num head">当日数据：</span></div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{userCount}}</span> 新增用户</div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{orderCount}}</span> 新增订单</div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{adminCount}}</span> 新增管理员</div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="4">
-          <div class="data_list all_head"><span class="data_num head">总数据：</span></div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{allUserCount}}</span> 注册用户</div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{allOrderCount}}</span> 订单</div>
-        </el-col>
-        <el-col :span="4">
-          <div class="data_list"><span class="data_num">{{allAdminCount}}</span> 管理员</div>
-        </el-col>
-      </el-row>
     </section>
     <tendency :sevenDate='sevenDate'
               :sevenDay='sevenDay'></tendency>
@@ -43,24 +14,16 @@ import headTop from '../components/headTop'
 import tendency from '../components/tendency'
 import dtime from 'time-formater'
 import {
-  userCount,
-  orderCount,
-  getUserCount,
-  getOrderCount,
-  adminDayCount,
-  adminCount
+  getTotalBookingCountForDay,
+  getToalBookingCountForStadiums
 } from '@/api/getData'
 export default {
   data() {
     return {
-      userCount: null,
-      orderCount: null,
-      adminCount: null,
-      allUserCount: null,
-      allOrderCount: null,
-      allAdminCount: null,
       sevenDay: [],
-      sevenDate: [[], [], []]
+      sevenDate: [],
+      stadiums: [],
+      stadiumBookingCount: []
     }
   },
   components: {
@@ -68,7 +31,6 @@ export default {
     tendency
   },
   mounted() {
-    this.initData()
     for (let i = 6; i > -1; i--) {
       const date = dtime(new Date().getTime() - 86400000 * i).format(
         'YYYY-MM-DD'
@@ -79,49 +41,23 @@ export default {
   },
   computed: {},
   methods: {
-    async initData() {
-      const today = dtime().format('YYYY-MM-DD')
-      Promise.all([
-        userCount(today),
-        orderCount(today),
-        adminDayCount(today),
-        getUserCount({ adminId: this.$store.state.adminInfo.adminId }),
-        getOrderCount(),
-        adminCount()
-      ])
-        .then(res => {
-          this.userCount = res[0].count
-          this.orderCount = res[1].count
-          this.adminCount = res[2].count
-          this.allUserCount = res[3].count
-          this.allOrderCount = res[4].count
-          this.allAdminCount = res[5].count
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
     async getSevenData() {
-      const apiArr = [[], [], []]
-      /**
-       * item是格式为"yyyy-MM-dd"的时间，apiArr[]中存的是返回的数据条目，代表
-       * 日期为item中的注册用户数量，订单数量，新增管理员数量
-       */
+      const apiArr = []
       this.sevenDay.forEach(item => {
-        apiArr[0].push(userCount(item))
-        apiArr[1].push(orderCount(item))
-        apiArr[2].push(adminDayCount(item))
+        apiArr.push(
+          getTotalBookingCountForDay({
+            date: item,
+            adminId: this.$store.state.adminInfo.adminId
+          })
+        )
       })
-      /**
-       * 解析返回的apiArr中的各个条目
-       */
-      const promiseArr = [...apiArr[0], ...apiArr[1], ...apiArr[2]]
-      Promise.all(promiseArr)
+
+      Promise.all(apiArr)
         .then(res => {
-          const resArr = [[], [], []]
+          const resArr = []
           res.forEach((item, index) => {
-            if (item.status == 1) {
-              resArr[Math.floor(index / 7)].push(item.count)
+            if (item.code == 0) {
+              resArr[index] = item.data
             }
           })
           this.sevenDate = resArr
@@ -129,6 +65,16 @@ export default {
         .catch(err => {
           console.log(err)
         })
+
+      const res = await getToalBookingCountForStadiums({
+        adminId: this.$store.state.adminInfo.adminId
+      })
+      if (res.code == 0) {
+        this.stadiums = res.data['stadiums']
+        this.stadiumBookingCount = res.data['count']
+      } else if (res.code == 1) {
+        console.log('获取场馆订单数据失败')
+      }
     }
   }
 }
