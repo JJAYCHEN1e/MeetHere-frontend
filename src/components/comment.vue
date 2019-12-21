@@ -46,13 +46,13 @@
         <div slot="header" class="clearfix">
           <span>{{ comment.userName }}</span>
           <br />
-          <span>{{ comment.postTime }}</span>
           <el-button
             @click="deleteComment(comment.id)"
             style="float: right; padding: 3px 0"
             type="text"
             v-if="userId == comment.userId"
           >删除</el-button>
+          <span>{{ comment.postTime }}</span>
         </div>
         {{ comment.content }}
       </el-card>
@@ -108,8 +108,8 @@ export default {
       }
       const res = await postComment({
         stadiumId: this.stadiumId,
-        customerId: this.userId,
-        commentContent: this.commentContent
+        commentContent: this.commentContent,
+        customerId: this.userId
       })
       if (res.code == 0) {
         this.postCommentSuccessNotify()
@@ -121,19 +121,18 @@ export default {
     },
     async deleteComment(id) {
       const res = await deleteComment({
-        commentId: id
+        commentId: id,
+        customerId: this.userId
       })
       console.log(res)
       if (res.code == 0) {
         for (var i = 0; i < this.comments.length; i++) {
           var comment = this.comments[i]
-          console.log(this.comments)
-          console.log(comment)
           if (comment.id == id) {
             this.comments.splice(i, 1)
           }
-          this.deleteCommentSuccessNotify()
         }
+        this.deleteCommentSuccessNotify()
         this.$forceUpdate()
       } else {
         console.log('删除失败')
@@ -147,9 +146,10 @@ export default {
       })
     },
     deleteCommentSuccessNotify() {
-      this.$notify.info({
+      this.$notify({
         title: '提示',
-        message: '删除评论成功'
+        message: '删除评论成功',
+        type: 'info'
       })
     },
     emptyContentNotify() {
@@ -174,7 +174,8 @@ export default {
     },
     async initData() {
       const res = await getStadiumById({
-        id: this.stadiumId
+        id: this.stadiumId,
+        customerId: this.userId
       })
       console.log(res)
       if (res.code == 0) {
@@ -192,7 +193,8 @@ export default {
     },
     async initCommentData() {
       const res = await getCommentsByStadiumId({
-        stadiumId: this.stadiumId
+        stadiumId: this.stadiumId,
+        customerId: this.userId
       })
       console.log(res)
       if (res.code == 0) {

@@ -44,7 +44,8 @@ export default {
     return {
       currentDialogVisible: this.dialogVisible,
       today: new Date(),
-      stadium: {}
+      stadium: {},
+      userId: this.$store.state.userInfo.customerId
     }
   },
   watch: {
@@ -59,7 +60,8 @@ export default {
   methods: {
     async initData() {
       const res = await getStadiumById({
-        id: this.stadiumId
+        id: this.stadiumId,
+        customerId: userId
       })
       console.log(res)
       if (res.code == 0) {
