@@ -103,11 +103,18 @@ export default {
     },
     async getSevenData() {
       const apiArr = [[], [], []]
+      /**
+       * item是格式为"yyyy-MM-dd"的时间，apiArr[]中存的是返回的数据条目，代表
+       * 日期为item中的注册用户数量，订单数量，新增管理员数量
+       */
       this.sevenDay.forEach(item => {
         apiArr[0].push(userCount(item))
         apiArr[1].push(orderCount(item))
         apiArr[2].push(adminDayCount(item))
       })
+      /**
+       * 解析返回的apiArr中的各个条目
+       */
       const promiseArr = [...apiArr[0], ...apiArr[1], ...apiArr[2]]
       Promise.all(promiseArr)
         .then(res => {
