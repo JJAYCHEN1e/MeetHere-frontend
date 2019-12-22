@@ -100,11 +100,11 @@ export default {
       }
       if (row.startTime > this.currentTime) {
         // 未来的
-        if (row.paid == 0) return 'futureUnpaid'
+        if (row.paid == 'false') return 'futureUnpaid'
       } else {
         // 进行中的
         //如果已经支付
-        if (row.paid == 1) return 'undergoing'
+        if (row.paid == 'true') return 'undergoing'
         //如果还没支付，那么失效
         else return 'failure'
       }
@@ -164,7 +164,7 @@ export default {
           tableItem.startTime = item.startTime
           tableItem.endTime = item.endTime
           tableItem.paid = item.paid
-          tableItem.paidState = item.paid == 0 ? '未支付' : '已支付'
+          tableItem.paidState = item.paid == 'false' ? '未支付' : '已支付'
           this.tableData.push(tableItem)
         })
       } else if (res.code == 1) {
