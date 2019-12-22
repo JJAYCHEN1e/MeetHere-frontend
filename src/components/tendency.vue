@@ -1,6 +1,11 @@
 <template>
-    <div class="line1">
-        <div id="line1" class="" style="width: 90%;height:450px;"></div>
+    <div>
+    <div class="chart-for-time">
+        <div id="time-chart" class="" style="width: 90%;height:450px;"></div>
+    </div>
+    <div class="chart-for-stadium">
+        <div id="stadium-chart" class="" style="width: 90%;height:450px;"></div>
+    </div>
     </div>
 </template>
 
@@ -16,24 +21,25 @@
     import 'echarts/lib/component/tooltip';
     export default {
         mounted(){
-            this.myChart = echarts.init(document.getElementById('line1'));
+            this.myChartForTime = echarts.init(document.getElementById('time-chart'));
+            this.myChartForStadium = echarts.init(document.getElementById('stadium-chart'));
             this.initData();
         },
-        props: ['sevenDate', 'sevenDay'],
+        props: ['sevenData', 'sevenDay', 'stadiums', 'stadiumBookingCount'],
         methods: {
             initData(){
                 const colors = ['#5793f3', '#675bba', '#d14a61'];
-                const option = {
+                const optionForTime = {
                     color: colors,
                     title: {
-                        text: '走势图',
+                        text: '7天内预约订单统计',
                         subtext: ''
                     },
                     tooltip: {
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['新注册用户', '新增订单', '新增管理员']
+                        data: ['预约订单数']
                     },
                     toolbox: {
                         show: true,
@@ -48,31 +54,16 @@
                     },
                     xAxis:  {
                         type: 'category',
-                        boundaryGap: false,
+                        // boundaryGap: false,
                         data: this.sevenDay
                     },
                     yAxis: [
                         {
                           type: 'value',
-                          name: '用户',
+                          name: '订单数',
                           min: 0,
-                          max: 200,
+                          max: 50,
                           position: 'left',
-                          axisLine: {
-                              lineStyle: {
-                                  color: '#999'
-                              }
-                          },
-                          axisLabel: {
-                              formatter: '{value}'
-                          }
-                        },
-                        {
-                          type: 'value',
-                          name: '订单',
-                          min: 0,
-                          max: 200,
-                          position: 'right',
                           axisLine: {
                               lineStyle: {
                                   color: '#999'
@@ -85,10 +76,10 @@
                     ],
                     series: [
                         {
-                            name:'新注册用户',
-                            type:'line',
-                            data:this.sevenDate[0],
-                            yAxisIndex: 1,
+                            name:'预约订单数',
+                            type:'bar',
+                            data:this.sevenData,
+                            yAxisIndex: 0,
                             markPoint: {
                                 data: [
                                     {type: 'max', name: '最大值'},
@@ -96,50 +87,100 @@
                                 ]
                             },
                         },
-                        {
-                            name:'新增订单',
-                            type:'line',
-                            data:this.sevenDate[1],
-                            yAxisIndex: 1,
-                            markPoint: {
-                                data: [
-                                    {type: 'max', name: '最大值'},
-                                    {type: 'min', name: '最小值'}
-                                ]
-                            },
-                        },
-                        {
-                            name:'新增管理员',
-                            type:'line',
-                            data:this.sevenDate[2],
-                            yAxisIndex: 1,
-                            markPoint: {
-                                data: [
-                                    {type: 'max', name: '最大值'},
-                                    {type: 'min', name: '最小值'}
-                                ]
-                            },
-                        }
                     ]
               };
-                this.myChart.setOption(option);
+              const optionForStadiums = {
+                    color: colors,
+                    title: {
+                        text: '各场馆预约订单统计',
+                        subtext: ''
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['预约订单数']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {readOnly: false},
+                            magicType: {type: ['bar', 'line']},
+                            restore: {},
+                        }
+                    },
+                    xAxis:  {
+                        type: 'category',
+                        data: this.stadiums
+                    },
+                    yAxis: [
+                        {
+                          type: 'value',
+                          name: '订单数',
+                          min: 0,
+                          max: 50,
+                          position: 'left',
+                          axisLine: {
+                              lineStyle: {
+                                  color: '#999'
+                              }
+                          },
+                          axisLabel: {
+                              formatter: '{value}'
+                          }
+                        },
+                    ],
+                    series: [
+                        {
+                            name:'预约订单数',
+                            type:'bar',
+                            data:this.stadiumBookingCount,
+                            yAxisIndex: 0,
+                            markPoint: {
+                                data: [
+                                    {type: 'max', name: '最大值'},
+                                    {type: 'min', name: '最小值'}
+                                ]
+                            },
+                        },
+                    ]
+              };
+                this.myChartForTime.setOption(optionForTime);
+                this.myChartForStadium.setOption(optionForStadiums);
             }
         },
         watch: {
-            sevenDate: function (){
+            sevenData: function (){
                 this.initData()
+                
             },
             sevenDay: function (){
                 this.initData()
+            },
+            stadiums: function () {
+                this.initData()
+                
+            },
+            stadiumBookingCount: function () {
+                this.initData()
             }
+            
         }
     }
 </script>
 
 <style lang="less">
 	@import '../style/mixin';
-    .line1{
+    .chart-for-time{
         display: flex;
         justify-content: center;
+    }
+    .chart-for-stadium{
+        display: flex;
+        justify-content: center;
+        margin-top: 5%;
     }
 </style>

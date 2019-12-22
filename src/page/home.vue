@@ -4,8 +4,10 @@
     <section class="data_section">
       <header class="section_title">数据统计</header>
     </section>
-    <tendency :sevenDate='sevenDate'
-              :sevenDay='sevenDay'></tendency>
+    <tendency :sevenData='sevenData'
+              :sevenDay='sevenDay'
+              :stadiums='stadiums'
+              :stadiumBookingCount='stadiumBookingCount'></tendency>
   </div>
 </template>
 
@@ -21,7 +23,7 @@ export default {
   data() {
     return {
       sevenDay: [],
-      sevenDate: [],
+      sevenData: [],
       stadiums: [],
       stadiumBookingCount: []
     }
@@ -60,7 +62,7 @@ export default {
               resArr[index] = item.data
             }
           })
-          this.sevenDate = resArr
+          this.sevenData = resArr
         })
         .catch(err => {
           console.log(err)
