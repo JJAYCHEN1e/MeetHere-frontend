@@ -9,14 +9,12 @@ const customer = r =>
 const manage = r =>
   require.ensure([], () => r(require('@/page/manage')), 'manage')
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home')
-const addShop = r =>
-  require.ensure([], () => r(require('@/page/addShop')), 'addShop')
 const addGoods = r =>
   require.ensure([], () => r(require('@/page/addGoods')), 'addGoods')
 const userList = r =>
   require.ensure([], () => r(require('@/page/userList')), 'userList')
-const shopList = r =>
-  require.ensure([], () => r(require('@/page/shopList')), 'shopList')
+const commentList = r =>
+  require.ensure([], () => r(require('@/page/commentList')), 'commentList')
 const bookingList = r =>
   require.ensure([], () => r(require('@/page/bookingList')), 'bookingList')
 const adminList = r =>
@@ -117,8 +115,8 @@ const routes = [
         ]
       },
       {
-        path: 'addShop',
-        component: addShop,
+        path: 'commentList',
+        component: commentList,
         meta: [
           '添加数据',
           '添加商铺',
@@ -150,11 +148,11 @@ const routes = [
         ]
       },
       {
-        path: 'shopList',
-        component: shopList,
+        path: 'commentList',
+        component: commentList,
         meta: [
           '数据管理',
-          '商家列表',
+          '留言列表',
           {
             requireAuth: 1
           }

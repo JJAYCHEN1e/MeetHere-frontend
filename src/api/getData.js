@@ -104,6 +104,22 @@ export const getTotalBookingCountForDay = data =>
 export const getToalBookingCountForStadiums = data =>
   fetch('/admin/booking-count-by-stadium', data)
 
+/**
+ * 获取评论个数
+ */
+export const getCommentCount = data => fetch('/comment/get-comment-count', data)
+
+/**
+ * 获取评论列表
+ */
+export const getCommentList = data => fetch('/comment/get-comment-list', data)
+
+/**
+ * 删除评论
+ */
+export const deleteCommentByAdmin = data =>
+  fetch('/comment/delete-by-admin', data, 'POST')
+
 /* ============= OLD API ============= */
 /**
  * 退出

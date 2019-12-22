@@ -207,7 +207,8 @@ export default {
 
 .futureUnpaid {
   .el-table_1_column_7,
-  .el-table_2_column_15 {
+  .el-table_2_column_15,
+  .el-table_3_column_20 {
     color: red !important;
   }
 }

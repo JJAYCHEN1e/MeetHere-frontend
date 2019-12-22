@@ -17,7 +17,7 @@
               <i class="el-icon-document"></i>场馆
             </template>
             <el-menu-item index="/manage/userList">用户列表</el-menu-item>
-            <el-menu-item index="/manage/shopList">商家列表</el-menu-item>
+            <el-menu-item index="/manage/commentList">留言列表</el-menu-item>
             <el-menu-item index="/manage/bookingList">订单列表</el-menu-item>
             <el-menu-item index="/manage/adminList">管理员列表</el-menu-item>
           </el-submenu>
@@ -25,7 +25,7 @@
             <template slot="title">
               <i class="el-icon-plus"></i>我的
             </template>
-            <el-menu-item index="/manage/addShop">订单</el-menu-item>
+            <el-menu-item index="/manage/commentList">订单</el-menu-item>
             <el-menu-item index="/manage/userInfo">个人信息</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
