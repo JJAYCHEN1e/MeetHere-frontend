@@ -82,7 +82,9 @@ export default {
       this.bookingDialogVisible = newValue
     },
     async initData() {
-      const res = await getStadiumList()
+      const res = await getStadiumList({
+        customerId: this.$store.state.userInfo.customerId
+      })
       console.log(res)
       if (res.code == 0) {
         this.stadiums = []
