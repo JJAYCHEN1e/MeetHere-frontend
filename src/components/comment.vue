@@ -1,5 +1,8 @@
 <template>
   <el-dialog title="场馆详情" :visible.sync="currentDialogVisible">
+    <vue-star animate="animated rubberBand" color="#F05654">
+      <a slot="icon" src="../../static/stadium.png" class="fa fa-heart" @click="handleClick"></a>
+    </vue-star>
     <span>
       <b>场馆编号：</b>
       {{ stadium.id }}
@@ -64,7 +67,13 @@
         <span>{{ userName }}</span>
         <el-button @click="postComment" style="float: right; padding: 3px 0" type="text">评论</el-button>
       </div>
-      <textarea rows="3" cols="100" v-model="commentContent"></textarea>
+      <el-input
+        type="textarea"
+        rows="3"
+        cols="100"
+        v-model="commentContent"
+        placeholder="请输入评论（100字以内）"
+      ></el-input>
     </el-card>
   </el-dialog>
 </template>
@@ -76,8 +85,12 @@ import {
   deleteComment,
   postComment
 } from '@/api/getData'
+import VueStar from 'vue-star'
 
 export default {
+  components: {
+    VueStar
+  },
   name: 'comment',
   props: ['dialogVisible', 'stadiumId'],
   data() {
@@ -105,18 +118,21 @@ export default {
     async postComment() {
       if (this.commentContent == '') {
         this.emptyContentNotify()
-      }
-      const res = await postComment({
-        stadiumId: this.stadiumId,
-        commentContent: this.commentContent,
-        customerId: this.userId
-      })
-      if (res.code == 0) {
-        this.postCommentSuccessNotify()
-        this.initCommentData()
-        this.commentContent = ''
+      } else if(this.commentContent.length >= 200) {
+        this.overflowContentNotify()
       } else {
-        this.postCommentFailNotify()
+        const res = await postComment({
+          stadiumId: this.stadiumId,
+          commentContent: this.commentContent,
+          customerId: this.userId
+        })
+        if (res.code == 0) {
+          this.postCommentSuccessNotify()
+          this.initCommentData()
+          this.commentContent = ''
+        } else {
+          this.postCommentFailNotify()
+        }
       }
     },
     async deleteComment(id) {
@@ -156,6 +172,13 @@ export default {
       this.$notify({
         title: '警告',
         message: '评论不可为空',
+        type: 'warning'
+      })
+    },
+    overflowContentNotify() {
+      this.$notify({
+        title: '警告',
+        message: '评论字数不能大于100',
         type: 'warning'
       })
     },
@@ -213,6 +236,9 @@ export default {
         console.log('数据获取失败')
       }
       this.$forceUpdate()
+    },
+    handleClick() {
+      //do something
     }
   }
 }
