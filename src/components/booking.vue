@@ -55,6 +55,9 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item class="block" label="总额：">
+        <span>{{ sumPrice }} 元</span>
+      </el-form-item>
     </el-form>
     <br />
     <br />
@@ -65,7 +68,11 @@
 </template>
 
 <script>
-import { getStadiumById, getEmptyTimesByStadiumIdAndDate } from '@/api/getData'
+import {
+  getStadiumById,
+  getEmptyTimesByStadiumIdAndDate,
+  addNewBooking
+} from '@/api/getData'
 
 export default {
   name: 'booking',
@@ -79,6 +86,7 @@ export default {
       daysAfterToday: null,
       startTime: null,
       endTime: null,
+      sumPrice: 0,
       dates: [
         {
           value: 0,
@@ -111,6 +119,10 @@ export default {
     },
     startTime: function() {
       this.updateEndTimes()
+    },
+    endTime: function() {
+      if (this.endTime == null) return
+      this.sumPrice = (this.endTime - this.startTime) * this.stadium.price
     }
   },
   methods: {
@@ -132,9 +144,11 @@ export default {
       this.endTime = null
       this.startTimes = []
       this.endTimes = []
+      this.sumPrice = 0
       this.$forceUpdate()
     },
     async getEmptyTimes() {
+      this.sumPrice = 0
       if (this.daysAfterToday == null) {
         return
       }
@@ -174,9 +188,46 @@ export default {
       this.$forceUpdate()
     },
     async submit() {
-
-    }, 
+      if (this.endTime == null) {
+        this.newBookingIsNotCompleteNotify()
+        return
+      }
+      const res = await addNewBooking({
+        customerId: this.userId,
+        stadiumId: this.stadiumId,
+        daysAfterToday: this.daysAfterToday,
+        startTime: this.startTime,
+        endTime: this.endTime
+      })
+      console.log(res)
+      if (res.code == 0) {
+        this.addNewBookingSuccessNotify()
+        this.initData()
+      } else {
+        this.addNewBookingFailNotify()
+      }
+    },
+    addNewBookingSuccessNotify() {
+      this.$notify({
+        title: '成功',
+        message: '添加新订单成功',
+        type: 'success'
+      })
+    },
+    addNewBookingFailNotify() {
+      this.$notify.error({
+        title: '错误',
+        message: '添加新订单失败'
+      })
+    },
+    newBookingIsNotCompleteNotify() {
+      this.$notify.error({
+        title: '错误',
+        message: '请填写完整订单日期和时间'
+      })
+    },
     updateEndTimes() {
+      this.sumPrice = 0
       this.endTime = null
       this.endTimes = []
       for (var i = 0; i < this.emptyTimes.length; i++) {

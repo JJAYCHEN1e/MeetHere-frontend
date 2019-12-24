@@ -87,8 +87,12 @@ export const deleteUser = data => fetch('/admin/delete-user', data, 'POST')
 /**
  * 得到选定日期，选定场馆的空闲时间情况
  */
-
 export const getEmptyTimesByStadiumIdAndDate = data => fetch('/booking/get-empty-time', data)
+
+/**
+ * 新建订单
+ */
+export const addNewBooking = data => fetch('/booking/add-new-booking', data, 'POST')
 
 /**
  * 获取订单总数
