@@ -68,7 +68,24 @@ export default {
       stadium: {},
       userId: this.$store.state.userInfo.customerId,
       startTime: '',
-      endTime: ''
+      endTime: '',
+      dates: [
+        {
+          value: '2010-10-10 00:00',
+          label: '今天',
+          disabled: false
+        }, 
+        {
+          value: '2010-10-11 00:00',
+          label: '明天',
+          disabled: false
+        },
+        {
+          value: '2010-10-12 00:00',
+          label: '后天',
+          disabled: false
+        }
+      ]
     }
   },
   watch: {
