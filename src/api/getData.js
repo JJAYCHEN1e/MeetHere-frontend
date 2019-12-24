@@ -120,6 +120,9 @@ export const getCommentList = data => fetch('/comment/get-comment-list', data)
 export const deleteCommentByAdmin = data =>
   fetch('/comment/delete-by-admin', data, 'POST')
 
+/* ============== /booking ============ */
+export const getEmptyTimesByStadiumIdAndDate = data => fetch('/booking/get-empty-time', data)
+
 /* ============= OLD API ============= */
 /**
  * 退出
