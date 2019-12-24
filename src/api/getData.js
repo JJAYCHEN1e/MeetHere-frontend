@@ -82,6 +82,8 @@ export const getUserList = data => fetch('/admin/get-user-list', data)
  */
 export const deleteUser = data => fetch('/admin/delete-user', data, 'POST')
 
+/* ============= /booking ============= */
+
 /**
  * 获取订单总数
  */
@@ -104,6 +106,8 @@ export const getTotalBookingCountForDay = data =>
 export const getToalBookingCountForStadiums = data =>
   fetch('/admin/booking-count-by-stadium', data)
 
+/* ============= /comment ============= */
+
 /**
  * 获取评论个数
  */
@@ -119,6 +123,33 @@ export const getCommentList = data => fetch('/comment/get-comment-list', data)
  */
 export const deleteCommentByAdmin = data =>
   fetch('/comment/delete-by-admin', data, 'POST')
+
+/* ============= /news ============= */
+
+/**
+ * 获取新闻个数
+ */
+export const getNewsCount = data => fetch('/news/get-news-count', data)
+
+/**
+ * 获取新闻列表
+ */
+export const getNewsList = data => fetch('/news/get-news-list', data)
+
+/**
+ * 删除指定 newsId 的新闻
+ */
+export const deleteNews = data => fetch('/news/delete', data, 'POST')
+
+/**
+ * 修改指定 newsId 的新闻
+ */
+export const updateNews = data => fetch('/news/update', data, 'POST')
+
+/**
+ * 发布新闻
+ */
+export const postNews = data => fetch('/news/post', data, 'POST')
 
 /* ============= OLD API ============= */
 /**
@@ -168,12 +199,6 @@ export const orderCount = date => fetch('/statis/order/' + date + '/count')
  */
 
 export const adminDayCount = date => fetch('/statis/admin/' + date + '/count')
-
-/**
- * 管理员列表
- */
-
-export const adminList = data => fetch('/admin/all', data)
 
 /**
  * 管理员数量

@@ -17,8 +17,8 @@ const commentList = r =>
   require.ensure([], () => r(require('@/page/commentList')), 'commentList')
 const bookingList = r =>
   require.ensure([], () => r(require('@/page/bookingList')), 'bookingList')
-const adminList = r =>
-  require.ensure([], () => r(require('@/page/adminList')), 'adminList')
+const newsList = r =>
+  require.ensure([], () => r(require('@/page/newsList')), 'newsList')
 const visitor = r =>
   require.ensure([], () => r(require('@/page/visitor')), 'visitor')
 const newMember = r =>
@@ -170,11 +170,11 @@ const routes = [
         ]
       },
       {
-        path: 'adminList',
-        component: adminList,
+        path: 'newsList',
+        component: newsList,
         meta: [
           '数据管理',
-          '管理员列表',
+          '新闻管理',
           {
             requireAuth: 1
           }
