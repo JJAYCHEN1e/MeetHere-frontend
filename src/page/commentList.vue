@@ -104,7 +104,7 @@ export default {
         } else {
           throw new Error('获取数据失败')
         }
-        this.getUComments()
+        this.getComments()
       } catch (err) {
         console.log('获取数据失败', err)
       }
@@ -115,9 +115,9 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.offset = (val - 1) * this.limit
-      this.getUComments()
+      this.getComments()
     },
-    async getUComments() {
+    async getComments() {
       const res = await getCommentList({
         offset: this.offset,
         limit: this.limit,

@@ -201,6 +201,11 @@ export default {
         }
       })
     }
+  },
+  watch: {
+    changePasswordDialogVisible: function() {
+      this.$refs['changePasswordForm'].resetFields()
+    }
   }
 }
 </script>

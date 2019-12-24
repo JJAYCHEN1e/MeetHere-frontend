@@ -19,7 +19,7 @@
             <el-menu-item index="/manage/userList">用户列表</el-menu-item>
             <el-menu-item index="/manage/commentList">留言列表</el-menu-item>
             <el-menu-item index="/manage/bookingList">订单列表</el-menu-item>
-            <el-menu-item index="/manage/adminList">管理员列表</el-menu-item>
+            <el-menu-item index="/manage/newsList">新闻管理</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
