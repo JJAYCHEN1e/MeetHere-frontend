@@ -1,8 +1,5 @@
 <template>
   <el-dialog title="场馆详情" :visible.sync="currentDialogVisible">
-    <vue-star animate="animated rubberBand" color="#F05654">
-      <a slot="icon" src="../../static/stadium.png" class="fa fa-heart" @click="handleClick"></a>
-    </vue-star>
     <span>
       <b>场馆编号：</b>
       {{ stadium.id }}
@@ -40,6 +37,11 @@
     <br />
     <br />
     <br />
+    <div>
+      <vue-star animate="animated bounceIn" color="#F05654">
+    <i slot="icon" class="fa fa-heart"></i>
+  </vue-star>
+    </div>
     <el-divider></el-divider>
     <b>评论</b>
     <br />
@@ -118,7 +120,7 @@ export default {
     async postComment() {
       if (this.commentContent == '') {
         this.emptyContentNotify()
-      } else if(this.commentContent.length >= 200) {
+      } else if (this.commentContent.length >= 200) {
         this.overflowContentNotify()
       } else {
         const res = await postComment({

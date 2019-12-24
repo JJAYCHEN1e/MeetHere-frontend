@@ -7,7 +7,7 @@
     <br />
     <br />
     <span>
-      <b>场馆名称：</b> 
+      <b>场馆名称：</b>
       {{ stadium.name }}
     </span>
     <br />
@@ -24,18 +24,39 @@
     <br />
     <span>今日：</span>
     {{ today.getMonth() + 1 }} 月 {{ today.getDate() }} 日
-    <el-tabs type="border-card">
-      <el-tab-pane label="今天">预约</el-tab-pane>
-      <el-tab-pane label="明天">预约</el-tab-pane>
-      <el-tab-pane label="后天">预约</el-tab-pane>
-    </el-tabs>
+    <br />
+    <br />
+    <el-form label-position="left">
+      <el-form-item class="block">
+        <span class="demonstration">选择日期：</span>
+        <el-select v-model="startTime" placeholder="请选择">
+          <el-option
+            v-for="item in dates"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item class="block">
+        <span class="demonstration">选择始末时间：</span>
+        <el-select v-model="startTime" placeholder="请选择">
+          <el-option
+            v-for="item in dates"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
   </el-dialog>
 </template>
 
 <script>
-import {
-  getStadiumById
-} from '@/api/getData'
+import { getStadiumById } from '@/api/getData'
 
 export default {
   name: 'booking',
@@ -45,7 +66,26 @@ export default {
       currentDialogVisible: this.dialogVisible,
       today: new Date(),
       stadium: {},
-      userId: this.$store.state.userInfo.customerId
+      userId: this.$store.state.userInfo.customerId,
+      startTime: '',
+      endTime: '',
+      dates: [
+        {
+          value: '2010-10-10 00:00',
+          label: '今天',
+          disabled: false
+        }, 
+        {
+          value: '2010-10-11 00:00',
+          label: '明天',
+          disabled: false
+        },
+        {
+          value: '2010-10-12 00:00',
+          label: '后天',
+          disabled: false
+        }
+      ]
     }
   },
   watch: {
@@ -61,7 +101,7 @@ export default {
     async initData() {
       const res = await getStadiumById({
         id: this.stadiumId,
-        customerId: userId
+        customerId: this.userId
       })
       console.log(res)
       if (res.code == 0) {
