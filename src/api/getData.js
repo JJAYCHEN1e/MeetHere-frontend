@@ -85,6 +85,12 @@ export const deleteUser = data => fetch('/admin/delete-user', data, 'POST')
 /* ============= /booking ============= */
 
 /**
+ * 得到选定日期，选定场馆的空闲时间情况
+ */
+
+export const getEmptyTimesByStadiumIdAndDate = data => fetch('/booking/get-empty-time', data)
+
+/**
  * 获取订单总数
  */
 export const getBookingCount = data => fetch('/admin/get-booking-count', data)
