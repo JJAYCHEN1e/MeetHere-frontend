@@ -40,8 +40,12 @@ const userInfo = r =>
   require.ensure([], () => r(require('@/page/userInfo')), 'userInfo')
 const adminLogin = r =>
   require.ensure([], () => r(require('@/page/adminLogin')), 'adminLogin')
+// mainPage
+  const mainPage = r =>
+  require.ensure([], () => r(require('@/page/mainPage')), 'mainPage')
 
 const routes = [
+  
   {
     path: '/',
     component: login,
@@ -62,6 +66,11 @@ const routes = [
       }
     ],
     children: [
+      {
+        path: 'mainPage',
+        component: mainPage,
+        meta: []
+      },
       {
         path: '',
         component: home,
@@ -113,6 +122,11 @@ const routes = [
             requireAuth: 1
           }
         ]
+      },
+      {
+        path: 'mainPage',
+        component: mainPage,
+        meta: []
       },
       {
         path: 'commentList',

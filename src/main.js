@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
       return
     } else {
       next({
-        path: '/'
+        path: '/mainPage'
       })
     }
   }
