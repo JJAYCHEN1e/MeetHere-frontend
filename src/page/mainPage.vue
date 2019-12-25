@@ -26,6 +26,7 @@
     <!-- ############ -->
     <!--  news  page  -->
     <!-- ############ -->
+
     <div class="fill2">
       <!-- :style="{backgroundImage: 'url(../../static/TENNIS.jpeg)',}" -->
       <div class="info">
@@ -35,7 +36,8 @@
         <i class="el-icon-arrow-down"></i>
         <br />
         <br />
-        <el-carousel indicator-position="outside" class="newsTab">
+
+        <el-carousel :interval="5000" arrow="always">
           <el-carousel-item v-for="item in 4" :key="item">
             <h3>{{ item }}</h3>
           </el-carousel-item>
@@ -135,11 +137,11 @@ export default {
 }
 
 .el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
+  background-color:#181b1f;
 }
 
 .el-carousel__item:nth-child(2n + 1) {
-  background-color: #d3dce6;
+  background-color:#181b1f;
 }
 .newsTab {
   width: 80%;
