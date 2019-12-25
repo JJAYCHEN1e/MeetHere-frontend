@@ -55,8 +55,8 @@
         </div>
         {{ comment.content }}
         <button @click="toggle_like(comment)" id="like" style="float: right">
-            <span :class="{'liked': comment.liked, 'default': !comment.liked}"></span>
-            <span>{{ comment.likes }}</span>
+          <span :class="{'liked': comment.liked, 'default': !comment.liked}"></span>
+          <span>{{ comment.likes }}</span>
         </button>
       </el-card>
       <br />
@@ -83,7 +83,8 @@ import {
   getStadiumById,
   getCommentsByStadiumId,
   deleteComment,
-  postComment
+  postComment,
+  updateLikes
 } from '@/api/getData'
 
 export default {
@@ -111,13 +112,22 @@ export default {
     }
   },
   methods: {
-    toggle_like(comment) {
-      if (!comment.liked) {
-        comment.likes++
+    async toggle_like(comment) {
+      const res = await updateLikes({
+        customerId: this.userId,
+        commentId: comment.id
+      })
+      console.log(res)
+      if (res.code == 0) {
+        if (!comment.liked) {
+          comment.likes++
+        } else {
+          comment.likes--
+        }
+        comment.liked = !comment.liked
       } else {
-        comment.likes--
+        console.log(res)
       }
-      comment.liked = !comment.liked
     },
     async postComment() {
       if (this.commentContent == '') {
@@ -234,7 +244,7 @@ export default {
           element.content = item.commentContent
           element.likes = item.likes
           element.id = item.commentId
-          element.liked = false
+          element.liked = item.liked == '1'
           this.comments.push(element)
         })
       } else {
@@ -260,7 +270,7 @@ export default {
   margin-right: 4px;
   width: 25px;
   height: 25px;
-  background: url(https://img3.doubanio.com/f/talion/c689ab2369da387f2cb0d4da4a22614d7f048bf9/pics/card/ic_heart_green.svg)
+  background: url(http://152.136.173.30/images/ic_heart_blue.svg)
     no-repeat;
 }
 #like {
@@ -272,8 +282,9 @@ export default {
   justify-content: center;
   font-size: 15px;
   margin: 30px auto;
-  color: #42bd56;
-  border: 1px solid #42bd56;
-  background:white;
+  color: #409eff;
+  /* border: 1px solid #42bd56; */
+  border: 1px solid #409eff;
+  background: white;
 }
 </style>

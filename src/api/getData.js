@@ -134,6 +134,12 @@ export const getCommentList = data => fetch('/comment/get-comment-list', data)
 export const deleteCommentByAdmin = data =>
   fetch('/comment/delete-by-admin', data, 'POST')
 
+
+/**
+ * 添加点赞
+ */
+export const updateLikes = data => fetch('/comment/update-likes', data, 'POST')
+
 /* ============= /news ============= */
 
 /**
