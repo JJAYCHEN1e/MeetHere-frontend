@@ -36,12 +36,6 @@
     </span>
     <br />
     <br />
-    <br />
-    <div>
-      <vue-star animate="animated bounceIn" color="#F05654">
-    <i slot="icon" class="fa fa-heart"></i>
-  </vue-star>
-    </div>
     <el-divider></el-divider>
     <b>评论</b>
     <br />
@@ -60,6 +54,10 @@
           <span>{{ comment.postTime }}</span>
         </div>
         {{ comment.content }}
+        <button @click="toggle_like(comment)" id="like" style="float: right">
+            <span :class="{'liked': comment.liked, 'default': !comment.liked}"></span>
+            <span>{{ comment.likes }}</span>
+        </button>
       </el-card>
       <br />
     </div>
@@ -87,12 +85,8 @@ import {
   deleteComment,
   postComment
 } from '@/api/getData'
-import VueStar from 'vue-star'
 
 export default {
-  components: {
-    VueStar
-  },
   name: 'comment',
   props: ['dialogVisible', 'stadiumId'],
   data() {
@@ -117,6 +111,14 @@ export default {
     }
   },
   methods: {
+    toggle_like(comment) {
+      if (!comment.liked) {
+        comment.likes++
+      } else {
+        comment.likes--
+      }
+      comment.liked = !comment.liked
+    },
     async postComment() {
       if (this.commentContent == '') {
         this.emptyContentNotify()
@@ -232,6 +234,7 @@ export default {
           element.content = item.commentContent
           element.likes = item.likes
           element.id = item.commentId
+          element.liked = false
           this.comments.push(element)
         })
       } else {
@@ -247,4 +250,30 @@ export default {
 </script>
 
 <style>
+.liked {
+  margin-right: 4px;
+  width: 25px;
+  height: 25px;
+  background-image: url(https://img3.doubanio.com/f/talion/0129352875382ff0544020161709c2ae9b00c737/pics/card/ic_heart_red.svg);
+}
+.default {
+  margin-right: 4px;
+  width: 25px;
+  height: 25px;
+  background: url(https://img3.doubanio.com/f/talion/c689ab2369da387f2cb0d4da4a22614d7f048bf9/pics/card/ic_heart_green.svg)
+    no-repeat;
+}
+#like {
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  margin: 30px auto;
+  color: #42bd56;
+  border: 1px solid #42bd56;
+  background:white;
+}
 </style>
