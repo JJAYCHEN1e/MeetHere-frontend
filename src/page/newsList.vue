@@ -81,14 +81,6 @@
                     :autosize="{ minRows:8, maxRows:8 }"
                     v-model="newsPostForm.newsContent"></el-input>
         </el-form-item>
-        <el-time-select placeholder="起始时间"
-                        v-model="startTime"
-                        :picker-options="{
-      start: '08:30',
-      step: '00:15',
-      end: '09:30'
-    }">
-        </el-time-select>
       </el-form>
       <span slot="footer"
             class="dialog-footer">
