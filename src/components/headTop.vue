@@ -1,15 +1,14 @@
 <template>
   <div class="header_container">
-
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="this.homePage">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-for="(item, index) in $route.meta.slice(0,$route.meta.length-1)"
-                          :key="index">{{item}}</el-breadcrumb-item>
+      <el-breadcrumb-item
+        v-for="(item, index) in $route.meta.slice(0,$route.meta.length-1)"
+        :key="index"
+      >{{item}}</el-breadcrumb-item>
     </el-breadcrumb>
     <el-breadcrumb>
-      <el-button type="text"
-                 class="log_out"
-                 @click="logoutButtonClicked()">退出</el-button>
+      <el-button type="text" class="log_out" @click="logoutButtonClicked()">退出</el-button>
     </el-breadcrumb>
   </div>
 </template>
