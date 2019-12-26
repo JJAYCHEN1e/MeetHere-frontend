@@ -32,9 +32,40 @@ export const changePassword = data =>
 /* ============= /stadium ============= */
 
 /**
+ * 获取场馆个数
+ */
+export const getStadiumCount = data => fetch('/stadium/get-stadium-count', data)
+
+/**
+ * 为管理员获取场馆列表
+ */
+export const getStadiumListForAdmin = data =>
+  fetch('/stadium/items-for-admin', data)
+
+/**
+ * 删除指定ID的场馆
+ */
+export const deleteStadium = data => fetch('/stadium/delete', data, 'POST')
+
+/**
+ * 新增场馆
+ */
+export const postStadium = data => fetch('/stadium/post', data, 'POST')
+
+/**
+ * 更新场馆
+ */
+export const updateStadium = data => fetch('/stadium/update', data, 'POST')
+
+/**
  * 获取所有场馆信息列表
  */
 export const getStadiumList = data => fetch('/stadium/items', data)
+
+/**
+ * 获取场馆的类型（名字与 type(int)）
+ */
+export const getStadiumTypes = data => fetch('/stadium/types', data)
 
 /**
  * 使用id获取场馆信息
@@ -87,12 +118,14 @@ export const deleteUser = data => fetch('/admin/delete-user', data, 'POST')
 /**
  * 得到选定日期，选定场馆的空闲时间情况
  */
-export const getEmptyTimesByStadiumIdAndDate = data => fetch('/booking/get-empty-time', data)
+export const getEmptyTimesByStadiumIdAndDate = data =>
+  fetch('/booking/get-empty-time', data)
 
 /**
  * 新建订单
  */
-export const addNewBooking = data => fetch('/booking/add-new-booking', data, 'POST')
+export const addNewBooking = data =>
+  fetch('/booking/add-new-booking', data, 'POST')
 
 /**
  * 获取订单总数
@@ -133,7 +166,6 @@ export const getCommentList = data => fetch('/comment/get-comment-list', data)
  */
 export const deleteCommentByAdmin = data =>
   fetch('/comment/delete-by-admin', data, 'POST')
-
 
 /**
  * 添加点赞

@@ -36,16 +36,17 @@ const explain = r =>
 const stadium = r =>
   require.ensure([], () => r(require('@/page/stadium')), 'stadium')
 
+const stadiumList = r =>
+  require.ensure([], () => r(require('@/page/stadiumList')), 'stadiumList')
 const userInfo = r =>
   require.ensure([], () => r(require('@/page/userInfo')), 'userInfo')
 const adminLogin = r =>
   require.ensure([], () => r(require('@/page/adminLogin')), 'adminLogin')
 // mainPage
-  const mainPage = r =>
+const mainPage = r =>
   require.ensure([], () => r(require('@/page/mainPage')), 'mainPage')
 
 const routes = [
-  
   {
     path: '/',
     component: login,
@@ -178,6 +179,17 @@ const routes = [
         meta: [
           '数据管理',
           '订单列表',
+          {
+            requireAuth: 1
+          }
+        ]
+      },
+      {
+        path: 'stadiumList',
+        component: stadiumList,
+        meta: [
+          '数据管理',
+          '场馆列表',
           {
             requireAuth: 1
           }
