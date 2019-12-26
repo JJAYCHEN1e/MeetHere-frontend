@@ -124,11 +124,6 @@ const routes = [
     ],
     children: [
       {
-        path: 'newspage',
-        component: newsPage,
-        meta: []
-      },
-      {
         path: '',
         component: home,
         meta: [
@@ -136,11 +131,6 @@ const routes = [
             requireAuth: 1
           }
         ]
-      },
-      {
-        path: 'mainPage',
-        component: mainPage,
-        meta: []
       },
       {
         path: 'commentList',

@@ -11,34 +11,33 @@
         </el-table-column>
         <el-table-column property="stadiumName"
                          label="场馆名"
-                         width="150">
+                         width="120">
         </el-table-column>
         <el-table-column property="type"
                          label="场馆类型"
-                         width="100">
+                         width="80">
         </el-table-column>
         <el-table-column property="location"
                          label="地点"
                          width="180">
         </el-table-column>
         <el-table-column property="description"
-                         label="文字描述">
+                         label="文字描述"
+                         width="180">
         </el-table-column>
         <el-table-column property="freeTime"
                          label="空闲时间">
         </el-table-column>
         <el-table-column property="price"
                          label="单价(元/小时)"
-                         width="150">
+                         width="120">
         </el-table-column>
         <el-table-column align="right"
-                         width="180">
+                         width="150">
           <template slot="header">
-            <el-button size="medium"
+            <el-button size="mini"
                        type="primary"
-                       circle
-                       icon="el-icon-edit"
-                       @click="formSendType='POST', newStadiumDialogVisible=true"></el-button>
+                       @click="formSendType='POST', newStadiumDialogVisible=true">新增场馆</el-button>
           </template>
           <template slot-scope="scope">
             <el-button size="mini"
@@ -138,6 +137,8 @@ import {
   getStadiumTypes
 } from '@/api/getData'
 import { mapState } from 'vuex'
+import dtime from 'time-formater'
+
 export default {
   data() {
     return {
@@ -159,6 +160,7 @@ export default {
       count: 0,
       currentPage: 1,
       search: '',
+      threeDay: [],
       types: [{ stadiumName: '', type: 0 }],
       newStadiumDialogVisible: false,
       formSendType: 'POST',
@@ -253,6 +255,12 @@ export default {
   created() {
     this.initData()
     this.getTypes()
+    for (let i = 0; i < 3; i++) {
+      const date = dtime(new Date().getTime() + 86400000 * i).format(
+        'YYYY-MM-DD'
+      )
+      this.threeDay.push(date)
+    }
   },
   computed: {
     ...mapState(['adminInfo'])
@@ -309,7 +317,15 @@ export default {
           tableItem.type = item.type
           tableItem.location = item.location
           tableItem.description = item.description
-          tableItem.freeTime = item.freeTime
+          tableItem.freeTime = ''
+          this.threeDay.forEach(date => {
+            tableItem.freeTime =
+              tableItem.freeTime +
+              date +
+              ':\n      ' +
+              item.freeTime[date].toString() +
+              '\n'
+          })
           tableItem.price = item.price
           this.tableData.push(tableItem)
         })
@@ -457,6 +473,9 @@ export default {
 .el-upload__tip {
   font-size: 12px;
   color: #606266;
-  margin-top: -22px;
+  margin-top: -10px;
+}
+.cell {
+  white-space: pre-wrap !important;
 }
 </style>
