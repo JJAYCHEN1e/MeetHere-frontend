@@ -9,7 +9,7 @@
                  text-color="#fff"
                  active-text-color="#20A0FF"
                  router>
-          <el-menu-item index="/manage/mainPage">
+          <el-menu-item index="/manage">
             <i class="el-icon-menu"></i>首页
           </el-menu-item>
           <el-submenu index="2">

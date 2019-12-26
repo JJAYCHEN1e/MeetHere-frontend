@@ -11,34 +11,33 @@
         </el-table-column>
         <el-table-column property="stadiumName"
                          label="场馆名"
-                         width="150">
+                         width="120">
         </el-table-column>
         <el-table-column property="type"
                          label="场馆类型"
-                         width="100">
+                         width="80">
         </el-table-column>
         <el-table-column property="location"
                          label="地点"
                          width="180">
         </el-table-column>
         <el-table-column property="description"
-                         label="文字描述">
+                         label="文字描述"
+                         width="180">
         </el-table-column>
         <el-table-column property="freeTime"
                          label="空闲时间">
         </el-table-column>
         <el-table-column property="price"
                          label="单价(元/小时)"
-                         width="150">
+                         width="120">
         </el-table-column>
         <el-table-column align="right"
-                         width="180">
+                         width="150">
           <template slot="header">
-            <el-button size="medium"
+            <el-button size="mini"
                        type="primary"
-                       circle
-                       icon="el-icon-edit"
-                       @click="formSendType='POST', newStadiumDialogVisible=true"></el-button>
+                       @click="formSendType='POST', newStadiumDialogVisible=true">新增场馆</el-button>
           </template>
           <template slot-scope="scope">
             <el-button size="mini"
@@ -101,7 +100,8 @@
                     :autosize="{ minRows:8, maxRows:8 }"
                     v-model="newStadiumForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="照片">
+        <el-form-item label="照片"
+                      prop="pictureRaw">
           <el-upload drag
                      action=""
                      :limit="1"
@@ -137,6 +137,8 @@ import {
   getStadiumTypes
 } from '@/api/getData'
 import { mapState } from 'vuex'
+import dtime from 'time-formater'
+
 export default {
   data() {
     return {
@@ -158,6 +160,7 @@ export default {
       count: 0,
       currentPage: 1,
       search: '',
+      threeDay: [],
       types: [{ stadiumName: '', type: 0 }],
       newStadiumDialogVisible: false,
       formSendType: 'POST',
@@ -167,7 +170,8 @@ export default {
         type: '',
         location: '',
         description: '',
-        price: ''
+        price: '',
+        pictureRaw: ''
       },
       shouldClearValidate: 0,
       rules: {
@@ -201,7 +205,7 @@ export default {
           {
             required: true,
             message: '请选择场馆类型',
-            trigger: ['blur']
+            trigger: ['blur', 'change']
           }
         ],
         price: [
@@ -234,6 +238,13 @@ export default {
             message: '长度在 1 到 200 个字符',
             trigger: ['blur', 'change']
           }
+        ],
+        pictureRaw: [
+          {
+            required: true,
+            message: '请上传图片',
+            trigger: ['blur', 'change']
+          }
         ]
       }
     }
@@ -244,6 +255,12 @@ export default {
   created() {
     this.initData()
     this.getTypes()
+    for (let i = 0; i < 3; i++) {
+      const date = dtime(new Date().getTime() + 86400000 * i).format(
+        'YYYY-MM-DD'
+      )
+      this.threeDay.push(date)
+    }
   },
   computed: {
     ...mapState(['adminInfo'])
@@ -300,7 +317,15 @@ export default {
           tableItem.type = item.type
           tableItem.location = item.location
           tableItem.description = item.description
-          tableItem.freeTime = item.freeTime
+          tableItem.freeTime = ''
+          this.threeDay.forEach(date => {
+            tableItem.freeTime =
+              tableItem.freeTime +
+              date +
+              ':\n      ' +
+              item.freeTime[date].toString() +
+              '\n'
+          })
           tableItem.price = item.price
           this.tableData.push(tableItem)
         })
@@ -322,6 +347,7 @@ export default {
       this.newStadiumForm.location = row.location
       this.newStadiumForm.description = row.description
       this.newStadiumForm.price = row.price
+      this.newStadiumForm.pictureRaw = 'nil'
     },
     handleDelete(index, row) {
       this.$confirm(
@@ -354,7 +380,8 @@ export default {
             type: this.newStadiumForm.type,
             price: this.newStadiumForm.price,
             location: this.newStadiumForm.location,
-            description: this.newStadiumForm.description
+            description: this.newStadiumForm.description,
+            pictureRaw: this.newStadiumForm.pictureRaw
           }
           if (this.formSendType == 'POST') {
             const res = await postStadium(body)
@@ -393,7 +420,6 @@ export default {
       }
     },
     onUploadChange(file) {
-      console.log(file.url)
       const isIMAGE =
         file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'
       const isLt1M = file.size / 1024 / 1024 < 1
@@ -404,17 +430,23 @@ export default {
       }
       if (!isLt1M) {
         this.$message.error('上传文件大小不能超过 1MB!')
+        this.$refs['upload'].clearFiles()
         return false
       }
       var reader = new FileReader()
       reader.readAsDataURL(file.raw)
+      const that = this
       reader.onload = function(e) {
-        console.log(this.result) //图片的base64数据
+        console.log(this.result)
+        that.newStadiumForm.pictureRaw = this.result
       }
     }
   },
   watch: {
     newStadiumDialogVisible: function(newValue) {
+      if (this.$refs['upload'] !== undefined) {
+        this.$refs['upload'].clearFiles()
+      }
       if (newValue == true) {
         if (this.formSendType == 'POST') {
           this.newStadiumForm.stadiumName = ''
@@ -422,11 +454,11 @@ export default {
           this.newStadiumForm.location = ''
           this.newStadiumForm.description = ''
           this.newStadiumForm.price = ''
-          this.shouldClearValidate = 5
+          this.newStadiumForm.pictureRaw = ''
+          if (this.newStadiumForm.stadiumId != '') this.shouldClearValidate = 5
         }
-      }
-      if (this.$refs['upload'] !== undefined) {
-        this.$refs['upload'].clearFiles()
+      } else {
+        this.$refs['newStadiumForm'].clearValidate()
       }
     }
   }
@@ -441,6 +473,9 @@ export default {
 .el-upload__tip {
   font-size: 12px;
   color: #606266;
-  margin-top: -22px;
+  margin-top: -10px;
+}
+.cell {
+  white-space: pre-wrap !important;
 }
 </style>
