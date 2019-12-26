@@ -430,6 +430,7 @@ export default {
     newStadiumDialogVisible: function(newValue) {
       if (this.$refs['upload'] !== undefined) {
         this.$refs['upload'].clearFiles()
+      }
       if (newValue == true) {
         if (this.formSendType == 'POST') {
           this.newStadiumForm.stadiumName = ''
