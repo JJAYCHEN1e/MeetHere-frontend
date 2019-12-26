@@ -16,7 +16,7 @@
             <template slot="title">
               <i class="el-icon-plus"></i>我的
             </template>
-            <el-menu-item index="/customer/userInfo">订单</el-menu-item>
+            <el-menu-item index="/customer/userBooking">订单</el-menu-item>
             <el-menu-item index="/customer/userInfo">个人信息</el-menu-item>
           </el-submenu>
           <el-submenu index="4">

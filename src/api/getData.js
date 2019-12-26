@@ -137,6 +137,21 @@ export const getBookingCount = data => fetch('/admin/get-booking-count', data)
  */
 export const getBookingList = data => fetch('/admin/get-booking-list', data)
 
+/**
+ * 获取特定用户订单列表
+ */
+export const getBookingListForCustomer = data => fetch('/booking/items', data)
+
+/**
+ * 获取特定用户订单总数
+ */
+export const getBookingCountForCustomer = data => fetch('/booking/count-for-customer', data)
+
+/**
+ * 为用户删除某个 bookingId 的订单
+ */
+export const deleteBookingForCustomer = data => fetch('/booking/delete-by-customer', data, 'POST')
+
 /*
  * 删除指定 bookingId 的订单
  */

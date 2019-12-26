@@ -48,6 +48,9 @@ const mainPage = r =>
 //newsPage
 const newsPage = r =>
   require.ensure([], () => r(require('@/page/newsPage')), 'newsPage')
+// userBooking
+const userBooking = r =>
+  require.ensure([], () => r(require('@/page/userBooking')), 'userBooking')
 
 const routes = [
   {
@@ -110,7 +113,18 @@ const routes = [
             requireAuth: 0
           }
         ]
-      }
+      },
+      {
+        path: 'userBooking',
+        component: userBooking,
+        meta: [
+          '我的',
+          '我的订单',
+          {
+            requireAuth: 0
+          }
+        ]
+      },
     ]
   },
   {
