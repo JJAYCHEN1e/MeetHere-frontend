@@ -2,15 +2,12 @@
   <div class="fillcontain">
     <head-top></head-top>
     <header class="user_title">我的信息</header>
-    <div class="user_set" >
+    <div class="user_set">
       <el-form :model="userInfoForm"
                :rules="rules"
                ref="userInfoForm"
                label-position="left"
-               label-width="100px"
-               
-               >
-
+               label-width="100px">
         <el-form-item label="用户 ID">
           <span>{{ userInfo.customerId }}</span>
         </el-form-item>
@@ -28,17 +25,17 @@
         <el-form-item label="注册时间">
           <span>{{ userInfo.registeredTime }}</span>
         </el-form-item>
-      <el-form-item>
-        <el-button type="primary" class="save_button"
-                   @click="save('userInfoForm')">保存信息</el-button>
-        <el-button type="primary" class="change_password"
-                   @click="changePasswordDialogVisible = true">修改密码</el-button>
-      </el-form-item>
-      <br/>
-      
       </el-form>
+      <div class="change_password">
+        <el-button type="primary"
+                   size="mini"
+                   @click="changePasswordDialogVisible = true">修改密码</el-button>
+      </div>
+      <div class="save_button">
+        <el-button type="success"
+                   @click="save('userInfoForm')">保存信息</el-button>
+      </div>
     </div>
-    
 
     <el-dialog title="修改密码"
                :visible.sync="changePasswordDialogVisible"
@@ -79,7 +76,6 @@ import headTop from '../components/headTop'
 import { mapState, mapMutations } from 'vuex'
 import { baseUrl, baseImgPath } from '@/config/env'
 import { saveUserInfo, changePassword } from '@/api/getData'
-
 export default {
   data() {
     return {
@@ -214,7 +210,6 @@ export default {
 
 <style lang="less">
 @import '../style/mixin';
-
 .user_set {
   width: 40%;
   background-color: #f9fafc;
@@ -228,11 +223,11 @@ export default {
   text-align: center;
 }
 .save_button {
-  margin: 20px auto 0;
+  // margin: 20px auto 0;
   text-align: center;
 }
 .change_password {
-  margin: 20px auto 0;
-  text-align: center;
+  margin: -30px auto 0;
+  text-align: right;
 }
 </style>
