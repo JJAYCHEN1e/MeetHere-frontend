@@ -101,7 +101,8 @@
                     :autosize="{ minRows:8, maxRows:8 }"
                     v-model="newStadiumForm.description"></el-input>
         </el-form-item>
-        <el-form-item label="照片">
+        <el-form-item label="照片"
+                      prop="pictureRaw">
           <el-upload drag
                      action=""
                      :limit="1"
@@ -167,7 +168,8 @@ export default {
         type: '',
         location: '',
         description: '',
-        price: ''
+        price: '',
+        pictureRaw: ''
       },
       shouldClearValidate: 0,
       rules: {
@@ -201,7 +203,7 @@ export default {
           {
             required: true,
             message: '请选择场馆类型',
-            trigger: ['blur']
+            trigger: ['blur', 'change']
           }
         ],
         price: [
@@ -232,6 +234,13 @@ export default {
             min: 1,
             max: 200,
             message: '长度在 1 到 200 个字符',
+            trigger: ['blur', 'change']
+          }
+        ],
+        pictureRaw: [
+          {
+            required: true,
+            message: '请上传图片',
             trigger: ['blur', 'change']
           }
         ]
@@ -322,6 +331,7 @@ export default {
       this.newStadiumForm.location = row.location
       this.newStadiumForm.description = row.description
       this.newStadiumForm.price = row.price
+      this.newStadiumForm.pictureRaw = 'nil'
     },
     handleDelete(index, row) {
       this.$confirm(
@@ -354,7 +364,8 @@ export default {
             type: this.newStadiumForm.type,
             price: this.newStadiumForm.price,
             location: this.newStadiumForm.location,
-            description: this.newStadiumForm.description
+            description: this.newStadiumForm.description,
+            pictureRaw: this.newStadiumForm.pictureRaw
           }
           if (this.formSendType == 'POST') {
             const res = await postStadium(body)
@@ -393,7 +404,6 @@ export default {
       }
     },
     onUploadChange(file) {
-      console.log(file.url)
       const isIMAGE =
         file.raw.type === 'image/jpeg' || file.raw.type === 'image/png'
       const isLt1M = file.size / 1024 / 1024 < 1
@@ -404,17 +414,22 @@ export default {
       }
       if (!isLt1M) {
         this.$message.error('上传文件大小不能超过 1MB!')
+        this.$refs['upload'].clearFiles()
         return false
       }
       var reader = new FileReader()
       reader.readAsDataURL(file.raw)
+      const that = this
       reader.onload = function(e) {
-        console.log(this.result) //图片的base64数据
+        console.log(this.result)
+        that.newStadiumForm.pictureRaw = this.result
       }
     }
   },
   watch: {
     newStadiumDialogVisible: function(newValue) {
+      if (this.$refs['upload'] !== undefined) {
+        this.$refs['upload'].clearFiles()
       if (newValue == true) {
         if (this.formSendType == 'POST') {
           this.newStadiumForm.stadiumName = ''
@@ -422,11 +437,11 @@ export default {
           this.newStadiumForm.location = ''
           this.newStadiumForm.description = ''
           this.newStadiumForm.price = ''
-          this.shouldClearValidate = 5
+          this.newStadiumForm.pictureRaw = ''
+          if (this.newStadiumForm.stadiumId != '') this.shouldClearValidate = 5
         }
-      }
-      if (this.$refs['upload'] !== undefined) {
-        this.$refs['upload'].clearFiles()
+      } else {
+        this.$refs['newStadiumForm'].clearValidate()
       }
     }
   }
