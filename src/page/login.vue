@@ -74,7 +74,7 @@ export default {
         type: 'success',
         message: '检测到您已登录，自动跳转至首页'
       })
-      this.$router.push('customer')
+      this.$router.push('customer/mainPage')
     }
   },
   methods: {
@@ -109,7 +109,7 @@ export default {
               },
               token: res.data['token']
             })
-            this.$router.push('customer')
+            this.$router.push('customer/mainPage')
           } else if (res.code == -1) {
             this.$message({
               type: 'error',
@@ -133,7 +133,7 @@ export default {
 <style lang="less" scoped>
 @import '../style/mixin';
 .login_page {
-  background: url('/static/Login-Background-2.jpg') no-repeat center center;
+  background: url('/static/TENNIS.jpeg') no-repeat center center;
   background-size: cover;
 }
 .manage_tip {

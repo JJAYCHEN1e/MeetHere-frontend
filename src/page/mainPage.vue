@@ -4,8 +4,10 @@
     <!-- welcome page-->
     <!-- ########### -->
 
-    <div class="fillin-contain" :style="{backgroundImage:'url(' + bg + ')',
-        }">
+    <div class="fillin-contain" key="scale-down"
+        :style="{backgroundImage:'url(' + bg + ')'}">
+        
+
       <div class="info">
         <p class="FontStyle1">ORDER YOUR STADIUM RIGHT NOW!</p>
         <p class="FontStyle2">
@@ -15,13 +17,14 @@
           <strong>Developed by T.C.X.X.</strong>
         </p>
 
-        <el-button type="primary" class="startBtn" @click="btnClick()">START YOUR ORDER</el-button>
+        <el-button type="primary" class="startBtn" @click="btnClick()"><strong>ORDER NOW</strong></el-button>
+        <el-button type="warning" 
+                 class="log_out"
+                 @click="logoutButtonClicked()"><strong>SIGN OUT</strong></el-button>
+
       </div>
     </div>
 
-    <!-- ############ -->
-    <!-- show stadium -->
-    <!-- ############ -->
 
     <!-- ############ -->
     <!--  news  page  -->
@@ -50,17 +53,34 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex'
+
 export default {
   data() {
     return {
       bg: require('../../static/BASKETBALL.jpeg')
     }
   },
+  computed: {
+    ...mapState(['userType', 'adminInfo', 'homePage'])
+  },
   methods: {
     btnClick() {
       this.$router.push('stadium')
+    },
+  
+    ...mapMutations(['logout']),
+    logoutButtonClicked() {
+      if (this.userType == 0) this.$router.push('/')
+      else if (this.userType == 1) this.$router.push('/adminLogin')
+      this.logout()
+      this.$message({
+        type: 'success',
+        message: '退出成功'
+      })
     }
   }
+
 }
 </script>
 
@@ -80,8 +100,15 @@ export default {
   height: auto;
 }
 .startBtn {
-  width: 250px;
+  width:160px;
   background-size: 100% auto;
+}
+
+.log_out{
+  
+  width: 160px;
+  background-size: 100% auto;
+
 }
 
 .fillin-contain {
@@ -98,6 +125,7 @@ export default {
 }
 
 .fillin-contain {
+
   height: 100%;
   width: auto;
 }

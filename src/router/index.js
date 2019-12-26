@@ -45,6 +45,9 @@ const adminLogin = r =>
 // mainPage
 const mainPage = r =>
   require.ensure([], () => r(require('@/page/mainPage')), 'mainPage')
+//newsPage
+const newsPage = r =>
+  require.ensure([], () => r(require('@/page/newsPage')), 'newsPage')
 
 const routes = [
   {
@@ -67,6 +70,11 @@ const routes = [
       }
     ],
     children: [
+      {
+        path: 'newspage',
+        component: newsPage,
+        meta: []
+      },
       {
         path: 'mainPage',
         component: mainPage,
@@ -115,6 +123,11 @@ const routes = [
       }
     ],
     children: [
+      {
+        path: 'newspage',
+        component: newsPage,
+        meta: []
+      },
       {
         path: '',
         component: home,
