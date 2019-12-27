@@ -35,7 +35,8 @@
           </template>
           <template slot-scope="scope">
             <!-- 修改按钮 -->
-            <el-button size="mini"
+            <el-button v-if="!scope.row.expired"
+                       size="mini"
                        type="warning"
                        @click="handleUpdate(scope.$index, scope.row)"
                        >修改</el-button>
@@ -183,7 +184,7 @@ export default {
           tableItem.end = item.end
           tableItem.paid = item.paid
           tableItem.paidState = item.paid == false ? '未支付' : '已支付'
-          tableItem.expire = item.expire
+          tableItem.expired = item.expired
           this.tableData.push(tableItem)
         })
       } else if (res.code == 1) {
