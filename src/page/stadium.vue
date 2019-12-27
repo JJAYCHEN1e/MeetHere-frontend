@@ -36,7 +36,7 @@
     ></comment>
     <booking
       v-bind:dialogVisible="bookingDialogVisible"
-      v-bind:stadiumId="clickedStadiumId"
+      v-bind:stadiumId="clickedStadiumId" 
       v-on:updateDialogVisible="updateBookingDialogVisible"
     ></booking>
   </div>

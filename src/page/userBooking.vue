@@ -29,15 +29,16 @@
         </el-table-column>
         <el-table-column>
           <template slot="header">
-            <el-input v-model="search"
+            <!-- <el-input v-model="search"
                       size="mini"
-                      placeholder="输入关键字搜索" />
+                      placeholder="输入关键字搜索" /> -->
           </template>
           <template slot-scope="scope">
             <!-- 修改按钮 -->
             <el-button size="mini"
                        type="warning"
-                       @click="handleUpdate(scope.$index, scope.row)">修改</el-button>
+                       @click="handleUpdate(scope.$index, scope.row)"
+                       >修改</el-button>
             <el-button size="mini"
                        type="danger"
                        @click="handleDelete(scope.$index, scope.row)">取消</el-button>
@@ -55,11 +56,17 @@
         </el-pagination>
       </div>
     </div>
+    <updateBooking
+      v-bind:dialogVisible="updateBookingDialogVisible"
+      v-bind:bookingMsg="currentRowMsg"
+      v-on:updateDialogVisible="updateUpdateBookingDialogVisible"
+    ></updateBooking>
   </div>
 </template>
 
 <script>
 import headTop from '../components/headTop'
+import updateBooking from '@/components/updateBooking.vue'
 import { getBookingListForCustomer, getBookingCountForCustomer, deleteBookingForCustomer } from '@/api/getData'
 import dtime from 'time-formater'
 
@@ -83,17 +90,26 @@ export default {
       offset: 0,
       limit: 20,
       count: 0,
-      currentPage: 1
+      currentPage: 1, 
+      currentRowMsg: {},
+      updateBookingDialogVisible: false  
     }
   },
   components: {
-    headTop
+    headTop,
+    updateBooking
   },
   created() {
     this.initData()
   },
   mounted() {},
   methods: {
+    setUpdateBookingDialogVisible() {
+      this.updateBookingDialogVisible = true
+    },
+    updateUpdateBookingDialogVisible(newValue) {
+      this.updateBookingDialogVisible = newValue
+    },
     rowClassName({ row, rowIndex }) {
       if (row.paid == true) return 'finished'
       return 'failure'
@@ -137,7 +153,13 @@ export default {
       })
     },
     handleUpdate(index, row) {
-        //TODO: 处理订单修改
+      this.currentRowMsg.bookingId = row.bookingId
+      this.currentRowMsg.stadiumId = row.stadiumId
+      this.currentRowMsg.daysAfterToday = row.daysAfterToday
+      this.currentRowMsg.start = row.start
+      this.currentRowMsg.end = row.end
+      this.currentRowMsg.priceSum = row.priceSum
+      this.setUpdateBookingDialogVisible()
     },
     async getBookingData() {
       const res = await getBookingListForCustomer({
@@ -152,8 +174,13 @@ export default {
           tableItem.bookingId = item.bookingId
           tableItem.stadiumName = item.stadiumName
           tableItem.priceSum = item.priceSum + '¥'
+          tableItem.sumPrice = item.priceSum
           tableItem.startTime = item.startTime
           tableItem.endTime = item.endTime
+          tableItem.stadiumId = item.stadiumId
+          tableItem.daysAfterToday = item.daysAfterToday
+          tableItem.start = item.start
+          tableItem.end = item.end
           tableItem.paid = item.paid
           tableItem.paidState = item.paid == false ? '未支付' : '已支付'
           tableItem.expire = item.expire
