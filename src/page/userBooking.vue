@@ -158,7 +158,7 @@ export default {
       this.currentRowMsg.daysAfterToday = row.daysAfterToday
       this.currentRowMsg.start = row.start
       this.currentRowMsg.end = row.end
-      this.currentRowMsg.priceSum = row.priceSum
+      this.currentRowMsg.priceSum = row.sumPrice
       this.setUpdateBookingDialogVisible()
     },
     async getBookingData() {

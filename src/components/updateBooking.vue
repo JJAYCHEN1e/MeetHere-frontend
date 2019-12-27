@@ -59,7 +59,6 @@
         <span>{{ sumPrice }} 元</span>
       </el-form-item>
     </el-form>
-    <button @click="test">1111</button>
     <br />
     <br />
     <div class="submit_button">
@@ -111,17 +110,17 @@ export default {
   watch: {
     dialogVisible: function(newValue) {
       this.currentDialogVisible = newValue
-      if(newValue == true) {
-        this.isInit = true,
+      if (newValue == true) {
+        this.isInit = true
         this.daysAfterToday = null
         this.startTime = null
         this.endTime = null
-        this.sumPrice = 0,
-        this.startTimes = [],
-        this.endTimes = [],
-        this.emptyTimes = [],
+        this.sumPrice = 0
+        this.startTimes = []
+        this.endTimes = []
+        this.emptyTimes = []
         this.initData()
-      } else if(newValue == false) {
+      } else if (newValue == false) {
         this.endTime = null
       }
     },
@@ -206,7 +205,11 @@ export default {
         res.data.forEach(item => {
           const element = {}
           element.start = item.start
-          if (this.daysAfterToday == this.bookingMsg.daysAfterToday && flag == 0 && item.start >= end) {
+          if (
+            this.daysAfterToday == this.bookingMsg.daysAfterToday &&
+            flag == 0 &&
+            item.start >= end
+          ) {
             this.emptyTimes.push(currentUnit)
             flag = 1
           }
@@ -214,14 +217,14 @@ export default {
           element.isVaild = true
           this.emptyTimes.push(element)
         })
-        for(var i = 1; i < this.emptyTimes.length; i++) {
-          if(this.emptyTimes[i].start == this.emptyTimes[i - 1].end) {
+        for (var i = 1; i < this.emptyTimes.length; i++) {
+          if (this.emptyTimes[i].start == this.emptyTimes[i - 1].end) {
             this.emptyTimes[i].start = this.emptyTimes[i - 1].start
             this.emptyTimes[i - 1].isVaild = false
           }
         }
         for (var i = 0; i < this.emptyTimes.length; i++) {
-          if(this.emptyTimes[i].isVaild == false) continue
+          if (this.emptyTimes[i].isVaild == false) continue
           for (
             var count = this.emptyTimes[i].start;
             count < this.emptyTimes[i].end;
@@ -239,16 +242,11 @@ export default {
           this.updateEndTimes()
           this.endTime = this.bookingMsg.end
           this.sumPrice = this.bookingMsg.priceSum
-          console.log('jidsajfidjsfiojdfiojsdfio')
         }
         this.$forceUpdate()
       } else {
         console.log('getEmptyTimes数据获取失败')
       }
-    },
-    test() {
-      console.log('zhelishiIsTest')
-      console.log(this.endTime)
     },
     async submit() {
       if (this.endTime == null) {
@@ -295,7 +293,10 @@ export default {
       this.endTime = null
       this.endTimes = []
       for (var i = 0; i < this.emptyTimes.length; i++) {
-        if(this.emptyTimes.isVaild == false) continue
+        if (this.emptyTimes[i].isVaild == false) {
+          console.log('被忽略的是' + i)
+          continue
+        }
         if (
           this.emptyTimes[i].start <= this.startTime &&
           this.startTime < this.emptyTimes[i].end
