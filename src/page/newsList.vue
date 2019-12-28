@@ -170,7 +170,7 @@ export default {
     async initData() {
       try {
         const res = await getNewsCount({
-          userId: this.adminInfo.AId
+          userId: this.adminInfo.adminId
         })
         if (res.code == 0) {
           this.count = parseInt(res.data['count'])
