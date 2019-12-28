@@ -4,10 +4,7 @@
     <!-- welcome page-->
     <!-- ########### -->
 
-    <div class="fillin-contain" key="scale-down"
-        :style="{backgroundImage:'url(' + bg + ')'}">
-        
-
+    <div class="fillin-contain" key="scale-down" :style="{backgroundImage:'url(' + bg + ')'}">
       <div class="info">
         <p class="FontStyle1">ORDER YOUR STADIUM RIGHT NOW!</p>
         <p class="FontStyle2">
@@ -17,14 +14,14 @@
           <strong>Developed by T.C.X.X.</strong>
         </p>
 
-        <el-button type="primary" class="startBtn" @click="btnClick()"><strong>ORDER NOW</strong></el-button>
-        <el-button type="warning" 
-                 class="log_out"
-                 @click="logoutButtonClicked()"><strong>SIGN OUT</strong></el-button>
-
+        <el-button type="primary" class="startBtn" @click="btnClick()">
+          <strong>ORDER NOW</strong>
+        </el-button>
+        <el-button type="warning" class="log_out" @click="logoutButtonClicked()">
+          <strong>SIGN OUT</strong>
+        </el-button>
       </div>
     </div>
-
 
     <!-- ############ -->
     <!--  news  page  -->
@@ -39,10 +36,15 @@
         <i class="el-icon-arrow-down"></i>
         <br />
         <br />
-
         <el-carousel :interval="5000" arrow="always">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3>{{ item }}</h3>
+          <el-carousel-item v-for="anews in news" :key="anews.value">
+            <div class = "newsCarousel">
+              <div class = 'newsText'>
+              <h3 class = 'newsTextTitle'>{{anews.title}}</h3>
+              <p class = 'newsTextContent'>{{anews.text}}</p>
+              <p class = 'newsTextTime'>{{anews.time}}</p>
+              </div>
+              </div>
           </el-carousel-item>
         </el-carousel>
         <br />
@@ -54,11 +56,16 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
+import { listNewsItem } from '@/api/getData'
 
 export default {
+  created() {
+    this.initData()
+  },
   data() {
     return {
-      bg: require('../../static/BASKETBALL.jpeg')
+      bg: require('../../static/BASKETBALL.jpeg'),
+      news: []
     }
   },
   computed: {
@@ -68,7 +75,7 @@ export default {
     btnClick() {
       this.$router.push('stadium')
     },
-  
+
     ...mapMutations(['logout']),
     logoutButtonClicked() {
       if (this.userType == 0) this.$router.push('/')
@@ -78,13 +85,73 @@ export default {
         type: 'success',
         message: '退出成功'
       })
+    },
+    async initData() {
+      const res = await listNewsItem({
+        offset: 0,
+        limit: 5,
+        userId: this.$store.state.userInfo.customerId
+      })
+      console.log(res)
+      if (res.code == 0) {
+        this.news = []
+        res.data.forEach(item => {
+          const elemement = {}
+          elemement.newsId = item.newsId
+          elemement.userId = item.adminId
+          elemement.title = item.newsTitle
+          elemement.text = item.newsContent
+          elemement.time = item.newsPostTime
+          // elemement.final = '<div>'+item.newsTitle+'<br/>'+item.newsContent+'<br/>'+item.newsPostTime+'</div>'
+          // const tag = {}
+          // tag.text = elemement.title +'\n'+ elemement.text + elemement.time
+          
+          this.news.push(elemement)
+        })
+      } else {
+        console.log('获取失败', err)
+      }
     }
   }
-
 }
 </script>
 
 <style>
+.newsText{
+  
+  width:80%;
+  height:260px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+.newsTextTitle{
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  display: inline-block;
+  height:20px;
+}
+
+
+.newsTextContent{
+  line-height: 30px;
+  height : 210px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;/*垂直居中*/
+  justify-content: center; /* 水平居中 */
+  align-items: center;
+}
+.newsTextTime{
+  font-size: 10px;
+  text-align: center;
+  vertical-align: middle;
+  height:60;
+}
+
 .el-icon-arrow-up {
   color: rgb(221, 200, 200);
 }
@@ -100,15 +167,13 @@ export default {
   height: auto;
 }
 .startBtn {
-  width:160px;
+  width: 160px;
   background-size: 100% auto;
 }
 
-.log_out{
-  
+.log_out {
   width: 160px;
   background-size: 100% auto;
-
 }
 
 .fillin-contain {
@@ -125,7 +190,6 @@ export default {
 }
 
 .fillin-contain {
-
   height: 100%;
   width: auto;
 }
@@ -156,21 +220,14 @@ export default {
   font-family: 'Courier New', Courier, monospace;
   line-height: 40px;
 }
-.el-carousel__item h3 {
-  color: #475669;
+
+.el-carousel__item div {
+  text-align: center;
+  color:antiquewhite;
   font-size: 18px;
-  opacity: 0.75;
-  line-height: 300px;
-  margin: 0;
 }
 
-.el-carousel__item:nth-child(2n) {
-  background-color:#181b1f;
-}
 
-.el-carousel__item:nth-child(2n + 1) {
-  background-color:#181b1f;
-}
 .newsTab {
   width: 80%;
   height: auto;

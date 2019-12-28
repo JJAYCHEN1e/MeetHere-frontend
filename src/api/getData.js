@@ -7,6 +7,13 @@ import fetch from '@/config/fetch'
 export const getCode = data => fetch('/customer/check-code', data)
 
 /**
+ * 
+ *  获取新闻 
+ */
+export const listNewsItem = data => fetch('/news/get-news-list', data) 
+
+
+/**
  * 注册
  */
 export const register = data => fetch('/customer/register', data, 'POST')
@@ -208,7 +215,7 @@ export const getNewsList = data => fetch('/news/get-news-list', data)
  * 删除指定 newsId 的新闻
  */
 export const deleteNews = data => fetch('/news/delete', data, 'POST')
-
+                                                                                                                                                                                                                                                                                                                                                                                         
 /**
  * 修改指定 newsId 的新闻
  */
@@ -426,3 +433,4 @@ export const getAddressById = address_id => fetch('/v1/addresse/' + address_id)
  */
 
 export const getUserCity = () => fetch('/v1/user/city/count')
+         

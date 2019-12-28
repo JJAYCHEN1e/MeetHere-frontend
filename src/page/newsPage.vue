@@ -1,4 +1,6 @@
+
 <template>
+
   <div>
     <head-top></head-top>
 
@@ -10,6 +12,8 @@
 </template>
 
 <script>
+import headTop from '../components/headTop'
+
 export default {
 
 }
