@@ -51,12 +51,47 @@
         <br />
       </div>
     </div>
+  <div class = 'fill2'>
+    <el-table :data="newsTable"
+              highlight-current-row
+              style="width: 100%">
+        
+        <el-table-column property="title"
+                         label="标题"
+                         width="180">
+        </el-table-column>
+        <el-table-column property="text"
+                         label="内容">
+          
+        </el-table-column>
+        <el-table-column property="time"
+                         label="发布时间"
+                         width="180">
+        </el-table-column>
+    </el-table>
+  </div>
+  <div class="Pagination"
+           style="text-align: left;margin-top: 10px;">
+        <el-pagination @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentPage"
+                       :page-size="10"
+                       layout="total, prev, pager, next"
+                       :total="count">
+        </el-pagination>
+      </div>
+
+
+
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { listNewsItem } from '@/api/getData'
+import { 
+  listNewsItem,
+  getNewsCount
+  } from '@/api/getData'
 
 export default {
   created() {
@@ -65,15 +100,31 @@ export default {
   data() {
     return {
       bg: require('../../static/BASKETBALL.jpeg'),
-      news: []
+      news: [],
+      newsTable:[],
+      offset: 0,
+      limit: 10,
+      currentPage: 1,
+      count: 0
     }
   },
   computed: {
     ...mapState(['userType', 'adminInfo', 'homePage'])
   },
   methods: {
+
+    handleCurrentChange(val) {
+      this.currentPage = val
+      this.offset = (val - 1) * this.limit
+      this.getNews()
+    },
+    
+
     btnClick() {
       this.$router.push('stadium')
+    },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
     },
 
     ...mapMutations(['logout']),
@@ -87,6 +138,19 @@ export default {
       })
     },
     async initData() {
+      const res = await getNewsCount({
+        userId: this.$store.state.userInfo.customerId
+      })
+      if (res.code == 0) {
+          this.count = parseInt(res.data['count'])
+        } else {
+          throw new Error('获取数据失败')
+        }
+      console.log(this.count)
+      this.getNewsPage()
+      this.getNewsTable()
+    },
+    async getNewsPage(){
       const res = await listNewsItem({
         offset: 0,
         limit: 5,
@@ -98,7 +162,7 @@ export default {
         res.data.forEach(item => {
           const elemement = {}
           elemement.newsId = item.newsId
-          elemement.userId = item.adminId
+          elemement.adminId = item.adminId
           elemement.title = item.newsTitle
           elemement.text = item.newsContent
           elemement.time = item.newsPostTime
@@ -111,6 +175,29 @@ export default {
       } else {
         console.log('获取失败', err)
       }
+    },
+    async getNewsTable(){
+        const res = await listNewsItem({
+          offset: this.offset,
+          limit: this.limit,
+          userId: this.$store.state.userInfo.customerId
+        })
+        console.log(res)
+        if(res.code ==0 ){
+          this.newsTable = []
+          res.data.forEach(item => {
+            const tableItem ={}
+          tableItem.newsId = item.newsId
+          tableItem.adminId = item.adminId
+          tableItem.title = item.newsTitle
+          tableItem.text = item.newsContent
+          tableItem.time = item.newsPostTime
+          this.newsTable.push(tableItem)
+          console.log("test here")
+          })
+        }else if(res.code == 1){
+          console.log("获取失败")
+        }
     }
   }
 }
