@@ -4,7 +4,9 @@
     <!-- welcome page-->
     <!-- ########### -->
 
-    <div class="fillin-contain" key="scale-down" :style="{backgroundImage:'url(' + bg + ')'}">
+    <div class="fillin-contain"
+         key="scale-down"
+         :style="{backgroundImage:'url(' + bg + ')'}">
       <div class="info">
         <p class="FontStyle1">ORDER YOUR STADIUM RIGHT NOW!</p>
         <p class="FontStyle2">
@@ -14,10 +16,14 @@
           <strong>Developed by T.C.X.X.</strong>
         </p>
 
-        <el-button type="primary" class="startBtn" @click="btnClick()">
+        <el-button type="primary"
+                   class="startBtn"
+                   @click="btnClick()">
           <strong>ORDER NOW</strong>
         </el-button>
-        <el-button type="warning" class="log_out" @click="logoutButtonClicked()">
+        <el-button type="warning"
+                   class="log_out"
+                   @click="logoutButtonClicked()">
           <strong>SIGN OUT</strong>
         </el-button>
       </div>
@@ -36,62 +42,59 @@
         <i class="el-icon-arrow-down"></i>
         <br />
         <br />
-        <el-carousel :interval="5000" arrow="always">
-          <el-carousel-item v-for="anews in news" :key="anews.value">
-            <div class = "newsCarousel">
-              <div class = 'newsText'>
-              <h3 class = 'newsTextTitle'>{{anews.title}}</h3>
-              <p class = 'newsTextContent'>{{anews.text}}</p>
-              <p class = 'newsTextTime'>{{anews.time}}</p>
+        <el-carousel :interval="5000"
+                     arrow="always">
+          <el-carousel-item v-for="anews in news"
+                            :key="anews.value">
+            <div class="newsCarousel">
+              <div class='newsText'>
+                <h3 class='newsTextTitle'>{{anews.title}}</h3>
+                <p class='newsTextContent'>{{anews.text}}</p>
+                <p class='newsTextTime'>{{anews.time}}</p>
               </div>
-              </div>
+            </div>
           </el-carousel-item>
         </el-carousel>
         <br />
         <br />
       </div>
     </div>
-  <div class = 'fill2'>
-    <el-table :data="newsTable"
-              highlight-current-row
-              style="width: 100%">
-        
+    <div class='fill2'>
+      <el-table :data="newsTable"
+                highlight-current-row
+                style="width: 100%">
+
         <el-table-column property="title"
                          label="标题"
                          width="180">
         </el-table-column>
         <el-table-column property="text"
                          label="内容">
-          
+
         </el-table-column>
         <el-table-column property="time"
                          label="发布时间"
                          width="180">
         </el-table-column>
-    </el-table>
-  </div>
-  <div class="Pagination"
-           style="text-align: left;margin-top: 10px;">
-        <el-pagination @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="currentPage"
-                       :page-size="10"
-                       layout="total, prev, pager, next"
-                       :total="count">
-        </el-pagination>
-      </div>
-
-
+      </el-table>
+    </div>
+    <div class="Pagination"
+         style="text-align: left;margin-top: 10px;">
+      <el-pagination @size-change="handleSizeChange"
+                     @current-change="handleCurrentChange"
+                     :current-page="currentPage"
+                     :page-size="10"
+                     layout="total, prev, pager, next"
+                     :total="count">
+      </el-pagination>
+    </div>
 
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { 
-  listNewsItem,
-  getNewsCount
-  } from '@/api/getData'
+import { listNewsItem, getNewsCount } from '@/api/getData'
 
 export default {
   created() {
@@ -101,7 +104,7 @@ export default {
     return {
       bg: require('../../static/BASKETBALL.jpeg'),
       news: [],
-      newsTable:[],
+      newsTable: [],
       offset: 0,
       limit: 10,
       currentPage: 1,
@@ -112,13 +115,11 @@ export default {
     ...mapState(['userType', 'adminInfo', 'homePage'])
   },
   methods: {
-
     handleCurrentChange(val) {
       this.currentPage = val
       this.offset = (val - 1) * this.limit
-      this.getNews()
+      this.getNewsTable()
     },
-    
 
     btnClick() {
       this.$router.push('stadium')
@@ -142,15 +143,15 @@ export default {
         userId: this.$store.state.userInfo.customerId
       })
       if (res.code == 0) {
-          this.count = parseInt(res.data['count'])
-        } else {
-          throw new Error('获取数据失败')
-        }
+        this.count = parseInt(res.data['count'])
+      } else {
+        throw new Error('获取数据失败')
+      }
       console.log(this.count)
       this.getNewsPage()
       this.getNewsTable()
     },
-    async getNewsPage(){
+    async getNewsPage() {
       const res = await listNewsItem({
         offset: 0,
         limit: 5,
@@ -169,74 +170,72 @@ export default {
           // elemement.final = '<div>'+item.newsTitle+'<br/>'+item.newsContent+'<br/>'+item.newsPostTime+'</div>'
           // const tag = {}
           // tag.text = elemement.title +'\n'+ elemement.text + elemement.time
-          
+
           this.news.push(elemement)
         })
       } else {
         console.log('获取失败', err)
       }
     },
-    async getNewsTable(){
-        const res = await listNewsItem({
-          offset: this.offset,
-          limit: this.limit,
-          userId: this.$store.state.userInfo.customerId
-        })
-        console.log(res)
-        if(res.code ==0 ){
-          this.newsTable = []
-          res.data.forEach(item => {
-            const tableItem ={}
+    async getNewsTable() {
+      const res = await listNewsItem({
+        offset: this.offset,
+        limit: this.limit,
+        userId: this.$store.state.userInfo.customerId
+      })
+      console.log(res)
+      if (res.code == 0) {
+        this.newsTable = []
+        res.data.forEach(item => {
+          const tableItem = {}
           tableItem.newsId = item.newsId
           tableItem.adminId = item.adminId
           tableItem.title = item.newsTitle
           tableItem.text = item.newsContent
           tableItem.time = item.newsPostTime
           this.newsTable.push(tableItem)
-          console.log("test here")
-          })
-        }else if(res.code == 1){
-          console.log("获取失败")
-        }
+          console.log('test here')
+        })
+      } else if (res.code == 1) {
+        console.log('获取失败')
+      }
     }
   }
 }
 </script>
 
 <style>
-.newsText{
-  
-  width:80%;
-  height:260px;
+.newsText {
+  width: 80%;
+  height: 260px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
 }
-.newsTextTitle{
+.newsTextTitle {
   width: 100%;
   text-align: center;
   vertical-align: middle;
   display: inline-block;
-  height:20px;
+  height: 20px;
 }
 
-
-.newsTextContent{
+.newsTextContent {
   line-height: 30px;
-  height : 210px;
+  height: 210px;
   display: -webkit-box;
   display: -moz-box;
   display: -ms-flexbox;
   display: -webkit-flex;
-  display: flex;/*垂直居中*/
+  display: flex; /*垂直居中*/
   justify-content: center; /* 水平居中 */
   align-items: center;
 }
-.newsTextTime{
+.newsTextTime {
   font-size: 10px;
   text-align: center;
   vertical-align: middle;
-  height:60;
+  height: 60;
 }
 
 .el-icon-arrow-up {
@@ -310,10 +309,9 @@ export default {
 
 .el-carousel__item div {
   text-align: center;
-  color:antiquewhite;
+  color: antiquewhite;
   font-size: 18px;
 }
-
 
 .newsTab {
   width: 80%;
